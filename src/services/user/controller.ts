@@ -28,17 +28,22 @@ export class UserController extends CommonController<UserManager> {
     public set = async (req:Request, res:Response) => {
         try {
             const body = req.body;
-            // TODO: regex for username
-            if (body && this.password_regex.test(body.password)) {
-                const result = await this.db_manager.create(body);
-
+            if (this.username_regex.test(body.name)) {
                 return res
-                    .status(200)
-                    .send(result);
+                    .status(400)
+                    .send(ErrorCodes.USERNAME_REGEX_MATCH);
             }
+            if (!this.password_regex.test(body.password)) {
+                return res
+                    .status(400)
+                    .send(ErrorCodes.PASSWORD_REGEX_MATCH);
+            }
+
+            const result = await this.db_manager.set(body);
+
             return res
-                .status(400)
-                .send(ErrorCodes.PASSWORD_REGEX_MATCH);
+                .status(200)
+                .send(result);
         } catch (error) {
             return res
                 .status(404)
@@ -79,4 +84,10 @@ export class UserController extends CommonController<UserManager> {
      * и быть размером не меньше 8 символов
      */
     private password_regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+
+    /**
+     * должен включать в себя строчные и прописные латинские буквы, цифры, символы - и _,
+     * и быть длинной от 6 до 32 символов
+     */
+    private username_regex = /^[a-zA-Z0-9_-]{6,32}$/;
 }

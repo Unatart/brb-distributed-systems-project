@@ -13,7 +13,7 @@ export class UserManager extends CommonDbManager<User> {
         throw Error(ErrorCodes.INCORRECT_UID);
     }
 
-    public async create(body:any) {
+    public async set(body:any) {
         const user = await this.repository.create(body);
         return await this.repository.save(user);
     }

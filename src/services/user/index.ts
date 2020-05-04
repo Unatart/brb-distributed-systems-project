@@ -6,6 +6,7 @@ import {User} from "./entity";
 import {UserController} from "./controller";
 import {userRoutes} from "./routes";
 import {database} from "../../common/database";
+import {DevHost} from "../../common/host_config";
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,7 +16,8 @@ createConnection(user_database).then(() => {
     const user_db_manager = new UserManager(User);
     const user_controller = new UserController(user_db_manager);
     userRoutes(app, user_controller);
-    app.listen(3001, () => {
-        console.log(`API USER running in http://localhost:${3001}`);
+
+    app.listen(DevHost.USER, () => {
+        console.log(`API USER running in http://localhost:${DevHost.USER}`);
     });
 });

@@ -4,5 +4,6 @@ export const enum ErrorCodes {
     INCORRECT_PASSWORD = "incorrect password",
     UID_REGEX_MATCH = "uid don't match regex",
     PASSWORD_REGEX_MATCH = "password don't match regex",
+    USERNAME_REGEX_MATCH = "username don't match regex",
     USER_NAME_ENGAGED = "this user name already engaged",
 }

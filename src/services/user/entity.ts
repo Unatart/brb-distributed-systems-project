@@ -9,6 +9,18 @@ export class User {
     @Column()
     password: string;
 
+    @Column( { unique: true })
+    name: string;
+
+    @Column({ nullable: true })
+    email: string;
+
+    @Column({ nullable: true })
+    photo_url: string;
+
+    @Column({ nullable: true, length: 500 })
+    about_story: string;
+
     @BeforeInsert()
     @BeforeUpdate()
     hashPassword() {
@@ -16,16 +28,4 @@ export class User {
             this.password = createHmac('sha256', this.password).digest('hex');
         }
     }
-
-    @Column({unique: true})
-    name: string;
-
-    @Column({nullable: true})
-    email: string;
-
-    @Column({nullable: true})
-    photo_url: string;
-
-    @Column({nullable: true, length: 500})
-    about_story: string;
 }
