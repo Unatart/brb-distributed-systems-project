@@ -7,9 +7,9 @@ import {ErrorCodes} from "../../common/error_codes";
 export class UserController extends CommonController<UserManager> {
     public get = async (req:Request, res:Response) => {
         try {
-            const uuid = req.params.id;
-            if (this.uuid_regex.test(uuid)) {
-                const result = await this.db_manager.get(uuid);
+            const id = req.params.id;
+            if (this.uuid_regex.test(id)) {
+                const result = await this.db_manager.get(id);
 
                 return res
                     .status(200)
@@ -73,7 +73,7 @@ export class UserController extends CommonController<UserManager> {
         } catch (error) {
             return res
                 .status(400)
-                .send();
+                .send(error.message);
         }
     };
 

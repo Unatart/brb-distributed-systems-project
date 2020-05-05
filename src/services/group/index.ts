@@ -1,0 +1,23 @@
+import * as express from "express";
+import * as bodyParser from "body-parser";
+import {createConnection} from 'typeorm';
+import {database} from "../../common/database";
+import {DevHost} from "../../common/host_config";
+import {Group} from "./entity";
+import {groupRoutes} from "./routes";
+import {GroupManager} from "./db_manager";
+import {GroupController} from "./controller";
+
+const app = express();
+app.use(bodyParser.json());
+
+const user_database = {...database, schema:"group", entities: [Group]};
+createConnection(user_database).then(() => {
+    const db_manager = new GroupManager(Group);
+    const controller = new GroupController(db_manager);
+    groupRoutes(app, controller);
+
+    app.listen(DevHost.GROUP, () => {
+        console.log(`API GROUP running in http://localhost:${DevHost.GROUP}`);
+    });
+});

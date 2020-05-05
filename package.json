@@ -5,7 +5,9 @@
     "test": "jest --forceExit --detectOpenHandles",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "build": "tsc",
-    "start_user": "KEY=ukey SECRET=user NODE_ENV=develop node src/services/user/index.js"
+    "start_user": "KEY=ukey SECRET=user NODE_ENV=develop node src/services/user/index.js",
+    "start_msg": "KEY=mkey SECRET=msg NODE_ENV=develop node src/services/msg/index.js",
+    "start_group": "KEY=gey SECRET=group NODE_ENV=develop node src/services/group/index.js"
   },
   "devDependencies": {
     "@types/node": "^13.13.4",

@@ -4,22 +4,22 @@ import {createHmac} from "crypto";
 @Entity()
 export class User {
     @PrimaryGeneratedColumn("uuid")
-    user_id: string;
+    user_id:string;
 
     @Column()
-    password: string;
+    password:string;
 
     @Column( { unique: true })
-    name: string;
+    name:string;
 
     @Column({ nullable: true })
-    email: string;
+    email:string;
 
     @Column({ nullable: true })
-    photo_url: string;
+    photo_url:string;
 
     @Column({ nullable: true, length: 500 })
-    about_story: string;
+    about_story:string;
 
     @BeforeInsert()
     @BeforeUpdate()

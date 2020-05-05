@@ -1,12 +1,15 @@
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity()
-export class Group {
+export class Msg {
     @PrimaryGeneratedColumn("uuid")
-    msg_id: string;
+    msg_id:string;
 
     @Column("uuid" )
-    user_id: string;
+    user_id:string;
+
+    @Column("uuid")
+    group_id:string;
 
     @Column({ length: 500 })
     text:string;

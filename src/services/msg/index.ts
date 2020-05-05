@@ -1,0 +1,23 @@
+import * as express from "express";
+import * as bodyParser from "body-parser";
+import {createConnection} from 'typeorm';
+import {database} from "../../common/database";
+import {DevHost} from "../../common/host_config";
+import {MsgManager} from "./db_manager";
+import {Msg} from "./entity";
+import {MsgController} from "./controller";
+import {msgRoutes} from "./routes";
+
+const app = express();
+app.use(bodyParser.json());
+
+const user_database = {...database, schema:"msg", entities: [Msg]};
+createConnection(user_database).then(() => {
+    const db_manager = new MsgManager(Msg);
+    const controller = new MsgController(db_manager);
+    msgRoutes(app, controller);
+
+    app.listen(DevHost.MSG, () => {
+        console.log(`API MSG running in http://localhost:${DevHost.MSG}`);
+    });
+});

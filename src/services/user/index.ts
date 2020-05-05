@@ -13,9 +13,9 @@ app.use(bodyParser.json());
 
 const user_database = {...database, schema:"user", entities: [User]};
 createConnection(user_database).then(() => {
-    const user_db_manager = new UserManager(User);
-    const user_controller = new UserController(user_db_manager);
-    userRoutes(app, user_controller);
+    const db_manager = new UserManager(User);
+    const controller = new UserController(db_manager);
+    userRoutes(app, controller);
 
     app.listen(DevHost.USER, () => {
         console.log(`API USER running in http://localhost:${DevHost.USER}`);
