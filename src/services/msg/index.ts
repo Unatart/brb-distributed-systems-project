@@ -2,7 +2,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import {createConnection} from 'typeorm';
 import {database} from "../../common/database";
-import {DevHost} from "../../common/host_config";
+import {host} from "../../common/host_config";
 import {MsgManager} from "./db_manager";
 import {Msg} from "./entity";
 import {MsgController} from "./controller";
@@ -17,7 +17,7 @@ createConnection(user_database).then(() => {
     const controller = new MsgController(db_manager);
     msgRoutes(app, controller);
 
-    app.listen(DevHost.MSG, () => {
-        console.log(`API MSG running in http://localhost:${DevHost.MSG}`);
+    app.listen(host.MSG, () => {
+        console.log(`API MSG running in http://localhost:${host.MSG}`);
     });
 });

@@ -26,6 +26,7 @@ export class GroupController extends CommonController<GroupManager> {
 
     public set = async (req:Request, res:Response) => {
         try {
+            // TODO: check if users exist
             const result = await this.db_manager.set(req.body);
 
             return res
@@ -40,6 +41,7 @@ export class GroupController extends CommonController<GroupManager> {
 
     public update = async (req:Request, res:Response) => {
         try {
+            // TODO: check if users exist
             if (!this.uuid_regex.test(req.body.name.group_id)) {
                 return res
                     .status(400)

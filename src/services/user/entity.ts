@@ -20,12 +20,4 @@ export class User {
 
     @Column({ nullable: true, length: 500 })
     about_story:string;
-
-    @BeforeInsert()
-    @BeforeUpdate()
-    hashPassword() {
-        if (this.password) {
-            this.password = createHmac('sha256', this.password).digest('hex');
-        }
-    }
 }

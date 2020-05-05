@@ -28,6 +28,7 @@ export class MsgController extends CommonController<MsgManager> {
     public set = async (req:Request, res:Response) => {
         try {
             const body = req.body;
+            // TODO: check if user exist and group exist
             if (!this.uuid_regex.test(body.name.user_id) || !this.uuid_regex.test(body.name.group_id)) {
                 return res
                     .status(400)
@@ -49,6 +50,7 @@ export class MsgController extends CommonController<MsgManager> {
     public update = async (req:Request, res:Response) => {
         try {
             const body = req.body;
+            // TODO: check if user exist and group exist
             if (!this.uuid_regex.test(body.name.user_id) || !this.uuid_regex.test(body.name.group_id)) {
                 return res
                     .status(400)

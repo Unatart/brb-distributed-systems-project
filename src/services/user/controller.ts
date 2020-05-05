@@ -9,15 +9,16 @@ export class UserController extends CommonController<UserManager> {
         try {
             const id = req.params.id;
             if (this.uuid_regex.test(id)) {
-                const result = await this.db_manager.get(id);
-
                 return res
-                    .status(200)
-                    .send(result);
+                    .status(400)
+                    .send(ErrorCodes.UID_REGEX_MATCH);
             }
+
+            const result = await this.db_manager.get(id);
+
             return res
-                .status(400)
-                .send(ErrorCodes.UID_REGEX_MATCH);
+                .status(200)
+                .send(result);
         } catch (error) {
             return res
                 .status(404)
@@ -25,10 +26,36 @@ export class UserController extends CommonController<UserManager> {
         }
     };
 
+    public getByNameAndPassword = async (req:Request, res:Response) => {
+        try {
+            const body = req.body;
+            if (!this.username_regex.test(body.name)) {
+                return res
+                    .status(400)
+                    .send(ErrorCodes.USERNAME_REGEX_MATCH);
+            }
+            if (!this.password_regex.test(body.password)) {
+                return res
+                    .status(400)
+                    .send(ErrorCodes.PASSWORD_REGEX_MATCH);
+            }
+
+            const result = await this.db_manager.getByNameAndPassword(body);
+
+            return res
+                .status(200)
+                .send(result);
+        } catch (error) {
+            return res
+                .status(404)
+                .send(error.message);
+        }
+    }
+
     public set = async (req:Request, res:Response) => {
         try {
             const body = req.body;
-            if (this.username_regex.test(body.name)) {
+            if (!this.username_regex.test(body.name)) {
                 return res
                     .status(400)
                     .send(ErrorCodes.USERNAME_REGEX_MATCH);
@@ -42,7 +69,7 @@ export class UserController extends CommonController<UserManager> {
             const result = await this.db_manager.set(body);
 
             return res
-                .status(200)
+                .status(201)
                 .send(result);
         } catch (error) {
             return res
@@ -70,6 +97,33 @@ export class UserController extends CommonController<UserManager> {
             return res
                 .status(200)
                 .send(result);
+        } catch (error) {
+            return res
+                .status(400)
+                .send(error.message);
+        }
+    };
+
+    // private method - connection between services
+    public check = async (req:Request, res:Response) => {
+        try {
+            const id = req.params.id;
+            if (!this.uuid_regex.test(id)) {
+                return res
+                    .status(400)
+                    .send(ErrorCodes.UID_REGEX_MATCH);
+            }
+
+            const result = await this.db_manager.get(id);
+            if (result) {
+                return res
+                    .status(200)
+                    .send({ exist: true });
+            }
+
+            return res
+                .status(404)
+                .send({ exist: false });
         } catch (error) {
             return res
                 .status(400)
