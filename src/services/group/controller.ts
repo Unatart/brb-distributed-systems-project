@@ -2,6 +2,8 @@ import {CommonController} from "../../common/common_controller";
 import {Request, Response} from "express";
 import {ErrorCodes} from "../../common/error_codes";
 import {GroupManager} from "./db_manager";
+import {host} from "../../common/host_config";
+import {getThroughMiddleware} from "../../helpers";
 
 export class GroupController extends CommonController<GroupManager> {
     public get = async (req:Request, res:Response) => {
@@ -26,12 +28,20 @@ export class GroupController extends CommonController<GroupManager> {
 
     public set = async (req:Request, res:Response) => {
         try {
-            // TODO: check if users exist
-            const result = await this.db_manager.set(req.body);
+            const user = await getThroughMiddleware(req.body.user_id, `${host.USER}/users`, this.token);
+            this.token = user.token;
+
+            if (user.exist === true) {
+                const result = await this.db_manager.set(req.body);
+
+                return res
+                    .status(200)
+                    .send(result);
+            }
 
             return res
-                .status(200)
-                .send(result);
+                .status(404)
+                .send(user)
         } catch (error) {
             return res
                 .status(404)
@@ -105,4 +115,6 @@ export class GroupController extends CommonController<GroupManager> {
                 .send(error.message);
         }
     };
+
+    private token:string;
 }

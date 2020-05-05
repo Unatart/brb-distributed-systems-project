@@ -8,8 +8,8 @@ export const innerMiddleware = async (req:Request, res:Response, next:NextFuncti
             method: "GET",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                service_key: process.env.KEY,
-                service_secret: process.env.SECRET,
+                service_key: req.query.key,
+                service_secret: req.query.secret,
                 token: req.query.token
             })
         });
@@ -36,8 +36,8 @@ export const innerMiddleware = async (req:Request, res:Response, next:NextFuncti
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                service_key: process.env.KEY,
-                service_secret: process.env.SECRET
+                service_key: req.query.key,
+                service_secret: req.query.secret,
             })
         });
         const body = result.json();

@@ -9,9 +9,7 @@ export class AuthController extends CommonController<AuthManager> {
         try {
             const user_res = await fetch(`localhost:${host.USER}/users/`, {
                 method: "POST",
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: req.body
             });
 
@@ -38,9 +36,7 @@ export class AuthController extends CommonController<AuthManager> {
         try {
             const user_res = await fetch(`localhost:${host.USER}/users/`, {
                 method: "GET",
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: req.body
             });
 
