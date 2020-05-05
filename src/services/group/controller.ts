@@ -79,4 +79,30 @@ export class GroupController extends CommonController<GroupManager> {
                 .send(error.message);
         }
     };
+
+    public check = async (req:Request, res:Response) => {
+        try {
+            const id = req.params.id;
+            if (this.uuid_regex.test(id)) {
+                const result = await this.db_manager.get(id);
+
+                if (result && result.name) {
+                    return res
+                        .status(200)
+                        .send({ exist: true });
+                }
+
+                return res
+                    .status(404)
+                    .send({ exist: false });
+            }
+            return res
+                .status(400)
+                .send(ErrorCodes.UID_REGEX_MATCH);
+        } catch (error) {
+            return res
+                .status(404)
+                .send(error.message);
+        }
+    };
 }

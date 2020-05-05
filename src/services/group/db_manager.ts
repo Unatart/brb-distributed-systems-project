@@ -30,5 +30,4 @@ export class GroupManager extends CommonDbManager<Group> {
     public async delete(id:string) {
         return await this.repository.delete(id);
     }
-
 }

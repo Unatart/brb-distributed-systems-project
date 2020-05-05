@@ -104,7 +104,6 @@ export class UserController extends CommonController<UserManager> {
         }
     };
 
-    // private method - connection between services
     public check = async (req:Request, res:Response) => {
         try {
             const id = req.params.id;
@@ -115,7 +114,7 @@ export class UserController extends CommonController<UserManager> {
             }
 
             const result = await this.db_manager.get(id);
-            if (result) {
+            if (result && result.user_id) {
                 return res
                     .status(200)
                     .send({ exist: true });

@@ -1,6 +1,6 @@
 import {CommonDbManager} from "../../common/common_manager";
 import {Auth} from "./entity";
-import { TokenGenerator, TokenBase } from "ts-token-generator";
+import {TokenGenerator, TokenBase} from "ts-token-generator";
 import {ErrorCodes} from "../../common/error_codes";
 
 export class AuthManager extends CommonDbManager<Auth> {
@@ -54,7 +54,15 @@ export class AuthManager extends CommonDbManager<Auth> {
             }
         });
 
-        return session && this.checkTime(session.expires);
+        if (session) {
+            if (this.checkTime(session.expires)) {
+                return session;
+            }
+
+            throw Error(ErrorCodes.TOKEN_EXPIRED);
+        }
+
+        throw Error(ErrorCodes.NO_SUCH_SERVICE);
     }
 
     public async serviceUpdate(key:string, secret:string) {
