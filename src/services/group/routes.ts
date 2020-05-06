@@ -11,5 +11,5 @@ export const groupRoutes = (app, controller) => {
 
     // ---- private ----
 
-    app.check("/groups/:id", innerMiddleware, controller.check);
+    app.get("/groups/check/:id", innerMiddleware, controller.check);
 };

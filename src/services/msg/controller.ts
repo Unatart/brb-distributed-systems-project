@@ -3,7 +3,7 @@ import {Request, Response} from "express";
 import {ErrorCodes} from "../../common/error_codes";
 import {MsgManager} from "./db_manager";
 import {host} from "../../common/host_config";
-import { getThroughMiddleware } from "helpers";
+import {getThroughMiddleware} from "../../helpers";
 
 export class MsgController extends CommonController<MsgManager> {
     public get = async (req:Request, res:Response) => {

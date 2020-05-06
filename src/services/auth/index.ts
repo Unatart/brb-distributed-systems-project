@@ -11,7 +11,7 @@ import {AuthManager} from "./db_manager";
 const app = express();
 app.use(bodyParser.json());
 
-const user_database = {...database, schema:"msg", entities: [Auth]};
+const user_database = {...database, schema:"auth", entities: [Auth]};
 createConnection(user_database).then(() => {
     const db_manager = new AuthManager(Auth);
     const controller = new AuthController(db_manager);

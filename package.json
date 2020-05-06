@@ -7,7 +7,8 @@
     "build": "tsc",
     "start_user": "KEY=ukey SECRET=user NODE_ENV=develop node src/services/user/index.js",
     "start_msg": "KEY=mkey SECRET=msg NODE_ENV=develop node src/services/msg/index.js",
-    "start_group": "KEY=gey SECRET=group NODE_ENV=develop node src/services/group/index.js"
+    "start_group": "KEY=gey SECRET=group NODE_ENV=develop node src/services/group/index.js",
+    "start_auth": "NODE_ENV=develop node src/services/auth/index.js"
   },
   "devDependencies": {
     "@types/node": "^13.13.4",
