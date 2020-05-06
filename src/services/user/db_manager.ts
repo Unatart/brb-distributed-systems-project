@@ -1,6 +1,7 @@
 import {User} from "./entity";
 import {CommonDbManager} from "../../common/common_manager";
 import {ErrorCodes} from "../../common/error_codes";
+import {createHmac} from "crypto";
 
 export class UserManager extends CommonDbManager<User> {
     public async get(id:string) {
@@ -22,13 +23,14 @@ export class UserManager extends CommonDbManager<User> {
     }
 
     public async getByNameAndPassword(body:any) {
-        return await this.repository.findOne({ where: { name: body.name, password: body.password } })
+        const pass = createHmac('sha256', body.password).digest('hex');
+        return await this.repository.findOne({ where: { name: body.name, password: pass } });
     }
 
     public async update(id:string, body:any) {
         const user = await this.repository.findOne({ where: { user_id: id } });
         if (user) {
-            if (user.password !== body.password) {
+            if (user.password !== createHmac('sha256', body.password).digest('hex'))  {
                 throw Error(ErrorCodes.INCORRECT_PASSWORD)
             }
             if (user.name !== body.name) {

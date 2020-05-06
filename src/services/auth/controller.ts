@@ -3,28 +3,28 @@ import {AuthManager} from "./db_manager";
 import {Request, Response} from "express";
 import {host} from "../../common/host_config";
 import {ErrorCodes} from "../../common/error_codes";
+import * as request from "request-promise";
 
 export class AuthController extends CommonController<AuthManager> {
     public signOut = async (req:Request, res:Response) => {
         try {
-            const user_res = await fetch(`localhost:${host.USER}/users/`, {
+            const user_res = await request({
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
-                body: req.body
+                body: req.body,
+                uri: `http://localhost:${host.USER}/users/`,
+                json: true
+            }).catch((error) => {
+                return res
+                    .status(400)
+                    .send(error.message);
             });
 
-            const body = await user_res.json();
-            if (user_res.status === 201) {
-                const result = this.db_manager.create(body);
-
-                return res
-                    .status(201)
-                    .send(result)
-            }
+            const result = await this.db_manager.create(user_res);
 
             return res
-                .status(user_res.status)
-                .send(body);
+                .status(201)
+                .send(result)
         } catch (error) {
             return res
                 .status(404)
@@ -34,24 +34,23 @@ export class AuthController extends CommonController<AuthManager> {
 
     public signIn = async (req:Request, res:Response) => {
         try {
-            const user_res = await fetch(`localhost:${host.USER}/users/`, {
+            const user_res = await request({
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' },
-                body: req.body
+                body: req.body,
+                uri: `http://localhost:${host.USER}/users/`,
+                json: true
+            }).catch((error) => {
+                return res
+                    .status(404)
+                    .send(error.message);
             });
 
-            const body = await user_res.json();
-            if (user_res.status === 201) {
-                const result = this.db_manager.update(body.user_id);
-
-                return res
-                    .status(200)
-                    .send(result);
-            }
+            const result = await this.db_manager.update(user_res.user_id);
 
             return res
-                .status(user_res.status)
-                .send(body);
+                .status(200)
+                .send(result);
         } catch (error) {
             return res
                 .status(404)
@@ -68,7 +67,7 @@ export class AuthController extends CommonController<AuthManager> {
                     .send(ErrorCodes.UID_REGEX_MATCH);
             }
 
-            const result = this.db_manager.update(id);
+            const result = await this.db_manager.update(id);
 
             return res
                 .status(200)
@@ -82,7 +81,7 @@ export class AuthController extends CommonController<AuthManager> {
 
     public createTokenForService = async (req:Request, res:Response) => {
         try {
-            const result = this.db_manager.serviceCreate(
+            const result = await this.db_manager.serviceCreate(
                 req.body.service_key,
                 req.body.service_secret
             );
@@ -99,7 +98,7 @@ export class AuthController extends CommonController<AuthManager> {
 
     public checkTokenForService = async (req:Request, res:Response) => {
         try {
-            const result = this.db_manager.serviceCheck(
+            const result = await this.db_manager.serviceCheck(
                 req.body.service_key,
                 req.body.service_secret,
                 req.body.token
@@ -117,7 +116,7 @@ export class AuthController extends CommonController<AuthManager> {
 
     public updateTokenForService = async (req:Request, res:Response) => {
         try {
-            const result = this.db_manager.serviceUpdate(
+            const result = await this.db_manager.serviceUpdate(
                 req.body.service_key,
                 req.body.service_secret,
             );

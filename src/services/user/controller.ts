@@ -41,10 +41,16 @@ export class UserController extends CommonController<UserManager> {
             }
 
             const result = await this.db_manager.getByNameAndPassword(body);
+            if (result) {
+                return res
+                    .status(200)
+                    .send(result);
+            }
 
             return res
-                .status(200)
-                .send(result);
+                .status(404)
+                .send(Error(ErrorCodes.NO_SUCH_USER));
+
         } catch (error) {
             return res
                 .status(404)

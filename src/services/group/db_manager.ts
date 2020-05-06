@@ -9,7 +9,7 @@ export class GroupManager extends CommonDbManager<Group> {
             return group;
         }
 
-        throw Error(ErrorCodes.NO_MESSAGES);
+        throw Error(ErrorCodes.NO_SUCH_GROUP);
     }
 
     public async set(body:any) {

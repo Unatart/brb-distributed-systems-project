@@ -1,57 +1,43 @@
 import {host} from "./common/host_config";
+import * as request from "request-promise";
 
 export const getThroughMiddleware = async (id:string, substring:string, token:string) => {
-    const response = await fetch(`localhost:${substring}/check/${id}/?token=${token}&key=${process.env.KEY}&secret=${process.env.SECRET}`, {
+    return request({
         method: "GET",
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        uri: `http://localhost:${substring}/check/${id}/?token=${token}&key=${process.env.KEY}&secret=${process.env.SECRET}`,
+        json: true
+    })
+        .then((response) => ({ ...response, token: token }))
+        .catch((error) => {
+            const status = error.message.slice(0, 3);
+            const body = JSON.parse(error.message.slice(6));
+            switch (status) {
+                case "449":
+                    return request({
+                        method: "GET",
+                        headers: { 'Content-Type': 'application/json' },
+                        uri: `http://localhost:${substring}/check/${id}/?token=${body.token}&key=${process.env.KEY}&secret=${process.env.SECRET}`,
+                        json:true
+                    }).then((response) => ({ ...response, token: body.token}))
+                case "403":
+                    return request({
+                        method: "PATCH",
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            key: process.env.KEY,
+                            secret: process.env.SECRET
+                        }),
+                        uri: `http://localhost:${host.AUTH}/auth/service/`,
+                        json: true
+                    }).then((response) => {
+                        request({
+                            method: "GET",
+                            headers: { 'Content-Type': 'application/json' },
+                            uri: `http://localhost:${substring}/check/${id}/?token=${response.token}&key=${process.env.KEY}&secret=${process.env.SECRET}`,
+                            json: true
+                        }).then((retry_response) => ({...retry_response, token: response.token}));
+                    });
+            }
     });
-
-    const body = await response.json();
-
-    switch (response.status) {
-        case 200:
-            return {
-                ...body,
-                token: token
-            };
-        case 449: {
-            const response_retry = await fetch(`localhost:${substring}/check/${id}/?token=${body.token}&key=${process.env.KEY}&secret=${process.env.SECRET}`, {
-                method: "GET",
-                headers: { 'Content-Type': 'application/json' }
-            });
-
-            if (response_retry.status === 200) {
-                return {
-                    ...body,
-                    token: body.token
-                };
-            }
-            break;
-        }
-        case 403: {
-            const auth = await fetch(`localhost:${host.AUTH}/auth/service/`, {
-                method: "PATCH",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    key: process.env.KEY,
-                    secret: process.env.SECRET
-                })
-            });
-
-            const auth_response = await auth.json();
-            if (auth.status === 200) {
-                const user_response_retry = await fetch(`localhost:${substring}/check/${id}/?token=${auth_response.token}&key=${process.env.KEY}&secret=${process.env.SECRET}`, {
-                    method: "GET",
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                if (user_response_retry.status === 200) {
-                    return {
-                        ...body,
-                        token: auth_response.token
-                    };
-                }
-            }
-        }
-    }
 };
