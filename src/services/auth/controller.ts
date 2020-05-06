@@ -58,16 +58,17 @@ export class AuthController extends CommonController<AuthManager> {
         }
     }
 
-    public updateToken = async (req:Request, res:Response) => {
+    public checkToken = async (req:Request, res:Response) => {
         try {
             const id = req.params.id;
+            const token = req.query.token as string;
             if (!this.uuid_regex.test(id)) {
                 return res
                     .status(400)
                     .send(ErrorCodes.UID_REGEX_MATCH);
             }
 
-            const result = await this.db_manager.update(id);
+            const result = await this.db_manager.checkAndUpdate(id, token);
 
             return res
                 .status(200)

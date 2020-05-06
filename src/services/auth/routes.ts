@@ -5,7 +5,7 @@ export const authRoutes = (app, controller) => {
 
     app.post("/auth/user/login/", controller.signIn);
 
-    app.patch("/auth/user/:id", controller.updateToken);
+    app.get("/auth/user/:id", controller.checkToken);
 
     // services
 

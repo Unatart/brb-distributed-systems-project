@@ -18,6 +18,20 @@ export class AuthManager extends CommonDbManager<Auth> {
         const session = await this.repository.findOne({ where: { user_id: id }});
 
         if (session) {
+            await this.repository.merge(session, {
+                token: this.token_gen.generate(),
+                expires: this.createDate(true),
+            });
+            return await this.repository.save(session);
+        }
+
+        throw Error(ErrorCodes.NO_SUCH_USER);
+    }
+
+    public async checkAndUpdate(id:string, token:string) {
+        const session = await this.repository.findOne({ where: { user_id: id, token: token }});
+
+        if (session) {
             if (!this.checkTime(session.expires)) {
                 throw Error(ErrorCodes.TOKEN_EXPIRED);
             }
