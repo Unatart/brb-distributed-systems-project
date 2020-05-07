@@ -21,6 +21,9 @@ export class User {
     @Column({ nullable: true, length: 500 })
     about_story:string;
 
+    @Column()
+    admin?:boolean;
+
     @BeforeInsert()
     @BeforeUpdate()
     hashPassword() {

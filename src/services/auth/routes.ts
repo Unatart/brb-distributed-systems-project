@@ -14,4 +14,10 @@ export const authRoutes = (app, controller) => {
     app.get("/auth/service/", controller.checkTokenForService);
 
     app.patch("/auth/service/", controller.updateTokenForService);
+
+    // oauth
+
+    app.post("/oauth/", controller.createCode);
+
+    app.post("/oauth/token", controller.getToken);
 };

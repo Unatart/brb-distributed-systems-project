@@ -11,5 +11,6 @@ export const enum ErrorCodes {
     TOKEN_EXPIRED = "token_expired",
     NO_SUCH_USER = "no such user, sign up pls",
     NO_SUCH_GROUP = "no such group",
-    REQUIRE_TOKEN_AND_UID = "token and uid required"
+    REQUIRE_TOKEN_AND_UID = "token and uid required",
+    ADMIN_ALLOWED = "only admin allowed"
 }

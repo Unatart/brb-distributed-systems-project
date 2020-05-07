@@ -8,6 +8,7 @@ import {queue} from "../../common/queue";
 import {createDate} from "../../helpers";
 
 export class AuthController extends CommonController<AuthManager> {
+    // USER
     public signOut = async (req:Request, res:Response) => {
         try {
             const user_res = await request({
@@ -108,6 +109,7 @@ export class AuthController extends CommonController<AuthManager> {
         }
     };
 
+    // SERVICE
     public createTokenForService = async (req:Request, res:Response) => {
         try {
             const result = await this.db_manager.serviceCreate(
@@ -156,6 +158,72 @@ export class AuthController extends CommonController<AuthManager> {
         } catch (error) {
             return res
                 .status(404)
+                .send(error.message);
+        }
+    };
+
+    // 3RD PARTY APP
+    public createCode = async (req:Request, res: Response) => {
+        try  {
+            const client_id = req.query.client_id as string;
+            const client_secret = req.query.client_secret as string;
+            const user_id = req.query.user_id as string;
+            const token = req.query.token as string;
+
+            const result = await this.db_manager.createCode(user_id, client_id, client_secret, token);
+
+            if (result) {
+                return res
+                    .status(200)
+                    .send(result);
+            }
+
+            return res
+                .status(401)
+                .send(result);
+        } catch (error) {
+            return res
+                .status(400)
+                .send(error.message);
+        }
+    };
+
+    public getToken = async (req: Request, res: Response) => {
+        try {
+            const client_id = req.query.client_id as string;
+            const client_secret = req.query.client_secret as string;
+            const grant_type = req.query.grant_type as string;
+
+            if (grant_type === "auth_code") {
+                const code = req.query.code as string;
+                const result = await this.db_manager.createTokenForCode(code, client_id, client_secret);
+
+                if (result) {
+                    return res
+                        .status(200)
+                        .send(result);
+                }
+                return res
+                    .status(401)
+                    .send(result);
+            }
+
+            if (grant_type === "refresh_token") {
+                const refresh_token = req.query.refresh_token as string;
+                const result = await this.db_manager.refreshTokenForCode(client_id, client_secret, refresh_token);
+
+                if (result) {
+                    return res
+                        .status(200)
+                        .send(result);
+                }
+                return res
+                    .status(401)
+                    .send(result);
+            }
+        } catch (error) {
+            return res
+                .status(400)
                 .send(error.message);
         }
     };
