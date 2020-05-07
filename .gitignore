@@ -1,0 +1,24 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+
+.DS_Store*
+Icon?
+._*
+
+# npm
+backend/node_modules
+backend/package-lock.json
+backend/*.log
+backend/*.gz
+
+# Coveralls
+coverage
+
+# Benchmarking
+benchmarks/graphs
+
+
+.idea/*
