@@ -9,10 +9,10 @@ Icon?
 ._*
 
 # npm
-node_modules
-package-lock.json
-*.log
-*.gz
+backend/node_modules
+backend/package-lock.json
+backend/*.log
+backend/*.gz
 
 # Coveralls
 coverage
@@ -21,4 +21,4 @@ coverage
 benchmarks/graphs
 
 
-.idea
+.idea/*
