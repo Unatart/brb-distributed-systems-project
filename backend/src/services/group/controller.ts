@@ -5,6 +5,7 @@ import {GroupManager} from "./db_manager";
 import {host} from "../../common/host_config";
 import {createDate, getThroughMiddleware} from "../../helpers";
 import {queue} from "../../common/queue";
+import {logInfo} from "../../common/logger";
 
 export class GroupController extends CommonController<GroupManager> {
     public get = async (req:Request, res:Response) => {
@@ -21,14 +22,17 @@ export class GroupController extends CommonController<GroupManager> {
                     extra: "getGroup"
                 });
 
+                logInfo("Get group", result);
                 return res
                     .status(200)
                     .send(result);
             }
+            logInfo("Get group failed", ErrorCodes.UID_REGEX_MATCH, true);
             return res
                 .status(400)
                 .send(ErrorCodes.UID_REGEX_MATCH);
         } catch (error) {
+            logInfo("Get group failed", error.message, true);
             return res
                 .status(404)
                 .send(error.message);
@@ -52,15 +56,18 @@ export class GroupController extends CommonController<GroupManager> {
                     extra: "setGroup"
                 });
 
+                logInfo("Set group", result);
                 return res
                     .status(201)
                     .send(result);
             }
 
+            logInfo("Set group failed", user, true);
             return res
                 .status(404)
                 .send(user)
         } catch (error) {
+            logInfo("Set group failed", error.message, true);
             return res
                 .status(404)
                 .send(error.message);
@@ -70,6 +77,7 @@ export class GroupController extends CommonController<GroupManager> {
     public update = async (req:Request, res:Response) => {
         try {
             if (!this.uuid_regex.test(req.params.id)) {
+                logInfo("Update group failed", ErrorCodes.UID_REGEX_MATCH, true);
                 return res
                     .status(400)
                     .send(ErrorCodes.UID_REGEX_MATCH);
@@ -86,10 +94,12 @@ export class GroupController extends CommonController<GroupManager> {
                 extra: "updateGroup"
             });
 
+            logInfo("Update group", result);
             return res
                 .status(200)
                 .send(result);
         } catch (error) {
+            logInfo("Update group failed", error.message, true);
             return res
                 .status(400)
                 .send(error.message);
@@ -99,6 +109,7 @@ export class GroupController extends CommonController<GroupManager> {
     public delete = async (req:Request, res:Response) => {
         try {
             if (!this.uuid_regex.test(req.params.id)) {
+                logInfo("Delete group failed", ErrorCodes.UID_REGEX_MATCH, true);
                 return res
                     .status(400)
                     .send(ErrorCodes.UID_REGEX_MATCH);
@@ -114,10 +125,12 @@ export class GroupController extends CommonController<GroupManager> {
                 extra: "deleteGroup"
             });
 
+            logInfo("Delete group", req.params.id, true)
             return res
                 .status(200)
                 .send(result)
         } catch (error) {
+            logInfo("Delete group failed", error.message, true);
             return res
                 .status(400)
                 .send(error.message);

@@ -7,6 +7,7 @@ import {Auth} from "./entity";
 import {authRoutes} from "./routes";
 import {AuthController} from "./controller";
 import {AuthManager} from "./db_manager";
+import {logInfo} from "../../common/logger";
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,6 +19,6 @@ createConnection(user_database).then(() => {
     authRoutes(app, controller);
 
     app.listen(host.AUTH.port, () => {
-        console.log(`API ${host.AUTH.name} running in http://localhost:${host.AUTH.port}`);
+        logInfo(`API ${host.AUTH.name} running in http://localhost:${host.AUTH.port}`);
     });
 });

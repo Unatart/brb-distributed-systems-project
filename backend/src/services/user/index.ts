@@ -7,6 +7,7 @@ import {UserController} from "./controller";
 import {userRoutes} from "./routes";
 import {database} from "../../common/database";
 import {host} from "../../common/host_config";
+import {logInfo} from "../../common/logger";
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,6 +19,6 @@ createConnection(user_database).then(() => {
     userRoutes(app, controller);
 
     app.listen(host.USER.port, () => {
-        console.log(`API ${host.USER.name} running in http://localhost:${host.USER.port}`);
+        logInfo(`API ${host.USER.name} running in http://localhost:${host.USER.port}`);
     });
 });

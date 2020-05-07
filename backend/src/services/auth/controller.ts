@@ -6,6 +6,7 @@ import {ErrorCodes} from "../../common/error_codes";
 import * as request from "request-promise";
 import {queue} from "../../common/queue";
 import {createDate} from "../../helpers";
+import {logInfo} from "../../common/logger";
 
 export class AuthController extends CommonController<AuthManager> {
     // USER
@@ -33,10 +34,12 @@ export class AuthController extends CommonController<AuthManager> {
                 extra: "signOut"
             });
 
+            logInfo("Sign out user", result);
             return res
                 .status(201)
                 .send(result)
         } catch (error) {
+            logInfo("Sign out user failed", error.message, true);
             return res
                 .status(404)
                 .send(error.message);
@@ -68,10 +71,12 @@ export class AuthController extends CommonController<AuthManager> {
                 extra: "signIn"
             });
 
+            logInfo("Sign in user", result);
             return res
                 .status(200)
                 .send(result);
         } catch (error) {
+            logInfo("Sign in user failed", error.message, true);
             return res
                 .status(404)
                 .send(error.message);
@@ -99,10 +104,12 @@ export class AuthController extends CommonController<AuthManager> {
                 extra: "checkToken"
             });
 
+            logInfo("Check token", result);
             return res
                 .status(200)
                 .send(result);
         } catch (error) {
+            logInfo("Check token failed", error.message, true);
             return res
                 .status(404)
                 .send(error.message);

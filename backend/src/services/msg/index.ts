@@ -7,6 +7,7 @@ import {MsgManager} from "./db_manager";
 import {Msg} from "./entity";
 import {MsgController} from "./controller";
 import {msgRoutes} from "./routes";
+import {logInfo} from "../../common/logger";
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,6 +19,6 @@ createConnection(user_database).then(() => {
     msgRoutes(app, controller);
 
     app.listen(host.MSG.port, () => {
-        console.log(`API ${host.MSG.name} running in http://localhost:${host.MSG.port}`);
+        logInfo(`API ${host.MSG.name} running in http://localhost:${host.MSG.port}`);
     });
 });

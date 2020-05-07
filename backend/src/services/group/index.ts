@@ -7,6 +7,7 @@ import {Group} from "./entity";
 import {groupRoutes} from "./routes";
 import {GroupManager} from "./db_manager";
 import {GroupController} from "./controller";
+import {logInfo} from "../../common/logger";
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,6 +19,6 @@ createConnection(user_database).then(() => {
     groupRoutes(app, controller);
 
     app.listen(host.GROUP.port, () => {
-        console.log(`API ${host.GROUP.name} running in http://localhost:${host.GROUP.port}`);
+        logInfo(`API ${host.GROUP.name} running in http://localhost:${host.GROUP.port}`);
     });
 });
