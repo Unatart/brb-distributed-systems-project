@@ -17,7 +17,7 @@ createConnection(user_database).then(() => {
     const controller = new MsgController(db_manager);
     msgRoutes(app, controller);
 
-    app.listen(host.MSG, () => {
-        console.log(`API MSG running in http://localhost:${host.MSG}`);
+    app.listen(host.MSG.port, () => {
+        console.log(`API ${host.MSG.name} running in http://localhost:${host.MSG.port}`);
     });
 });

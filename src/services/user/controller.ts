@@ -2,6 +2,9 @@ import {Request, Response} from "express";
 import {UserManager} from "./db_manager";
 import {CommonController} from "../../common/common_controller";
 import {ErrorCodes} from "../../common/error_codes";
+import {queue} from "../../common/queue";
+import {host} from "../../common/host_config";
+import {createDate} from "../../helpers";
 
 
 export class UserController extends CommonController<UserManager> {
@@ -13,6 +16,15 @@ export class UserController extends CommonController<UserManager> {
                     .status(400)
                     .send(ErrorCodes.UID_REGEX_MATCH);
             }
+
+            queue.push({
+                user_id: req.query.user_id as string,
+                service_name: host.USER.name,
+                method: "GET",
+                time: createDate(),
+                body: req.body,
+                extra: "getUser"
+            });
 
             const result = await this.db_manager.get(id);
 
@@ -99,6 +111,15 @@ export class UserController extends CommonController<UserManager> {
             }
 
             const result = await this.db_manager.update(req.params.id, req.body);
+
+            queue.push({
+                user_id: req.query.user_id as string,
+                service_name: host.USER.name,
+                method: "PATCH",
+                time: createDate(),
+                body: req.body,
+                extra: "updateUser"
+            });
 
             return res
                 .status(200)

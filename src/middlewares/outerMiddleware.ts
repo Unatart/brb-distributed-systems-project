@@ -10,7 +10,7 @@ export const outerMiddleware = async (req:Request, res:Response, next:NextFuncti
         return request({
             method: "GET",
             headers: { 'Content-Type': 'application/json' },
-            uri: `http://localhost:${host.AUTH}/auth/user/${user_id}/?token=${token}`
+            uri: `http://localhost:${host.AUTH.port}/auth/user/${user_id}/?token=${token}`
         })
             .then(() => next())
             .catch((error) => res.status(401).send(error.message));

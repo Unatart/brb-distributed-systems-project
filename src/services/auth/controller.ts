@@ -4,6 +4,8 @@ import {Request, Response} from "express";
 import {host} from "../../common/host_config";
 import {ErrorCodes} from "../../common/error_codes";
 import * as request from "request-promise";
+import {queue} from "../../common/queue";
+import {createDate} from "../../helpers";
 
 export class AuthController extends CommonController<AuthManager> {
     public signOut = async (req:Request, res:Response) => {
@@ -12,7 +14,7 @@ export class AuthController extends CommonController<AuthManager> {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
                 body: req.body,
-                uri: `http://localhost:${host.USER}/users/`,
+                uri: `http://localhost:${host.USER.port}/users/`,
                 json: true
             }).catch((error) => {
                 return res
@@ -21,6 +23,14 @@ export class AuthController extends CommonController<AuthManager> {
             });
 
             const result = await this.db_manager.create(user_res);
+            queue.push({
+                user_id: result.user_id,
+                service_name: host.AUTH.name,
+                method: "POST",
+                time: createDate(),
+                body: req.body,
+                extra: "signOut"
+            });
 
             return res
                 .status(201)
@@ -38,7 +48,7 @@ export class AuthController extends CommonController<AuthManager> {
                 method: "GET",
                 headers: { 'Content-Type': 'application/json' },
                 body: req.body,
-                uri: `http://localhost:${host.USER}/users/`,
+                uri: `http://localhost:${host.USER.port}/users/`,
                 json: true
             }).catch((error) => {
                 return res
@@ -47,6 +57,15 @@ export class AuthController extends CommonController<AuthManager> {
             });
 
             const result = await this.db_manager.update(user_res.user_id);
+
+            queue.push({
+                user_id: result.user_id,
+                service_name: host.AUTH.name,
+                method: "POST",
+                time: createDate(),
+                body: req.body,
+                extra: "signIn"
+            });
 
             return res
                 .status(200)
@@ -69,6 +88,15 @@ export class AuthController extends CommonController<AuthManager> {
             }
 
             const result = await this.db_manager.checkAndUpdate(id, token);
+
+            queue.push({
+                user_id: id,
+                service_name: host.AUTH.name,
+                method: "GET",
+                time: createDate(),
+                body: req.body,
+                extra: "checkToken"
+            });
 
             return res
                 .status(200)

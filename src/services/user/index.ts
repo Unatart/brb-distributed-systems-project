@@ -17,7 +17,7 @@ createConnection(user_database).then(() => {
     const controller = new UserController(db_manager);
     userRoutes(app, controller);
 
-    app.listen(host.USER, () => {
-        console.log(`API USER running in http://localhost:${host.USER}`);
+    app.listen(host.USER.port, () => {
+        console.log(`API ${host.USER.name} running in http://localhost:${host.USER.port}`);
     });
 });

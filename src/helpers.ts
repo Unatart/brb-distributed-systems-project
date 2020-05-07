@@ -28,7 +28,7 @@ export const getThroughMiddleware = async (id:string, substring:string, token:st
                             key: process.env.KEY,
                             secret: process.env.SECRET
                         }),
-                        uri: `http://localhost:${host.AUTH}/auth/service/`,
+                        uri: `http://localhost:${host.AUTH.port}/auth/service/`,
                         json: true
                     }).then((response) => {
                         request({
@@ -41,3 +41,11 @@ export const getThroughMiddleware = async (id:string, substring:string, token:st
             }
     });
 };
+
+export function createDate(db?:boolean):string {
+    let d = new Date();
+    if (db) {
+        d.setMinutes(d.getMinutes() + 30);
+    }
+    return d.toISOString().split("").slice(0, 10).join("") + " " + d.toISOString().split("").slice(11, 19).join("");
+}

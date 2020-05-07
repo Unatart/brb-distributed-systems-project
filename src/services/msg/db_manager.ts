@@ -1,6 +1,7 @@
 import {CommonDbManager} from "../../common/common_manager";
 import {ErrorCodes} from "../../common/error_codes";
 import {Msg} from "./entity";
+import {createDate} from "../../helpers";
 
 
 export class MsgManager extends CommonDbManager<Msg> {
@@ -14,7 +15,7 @@ export class MsgManager extends CommonDbManager<Msg> {
     }
 
     public async set(body:any) {
-        const msg = await this.repository.create({...body, time: this.createDate()});
+        const msg = await this.repository.create({...body, time: createDate()});
         return await this.repository.save(msg);
     }
 
@@ -30,11 +31,6 @@ export class MsgManager extends CommonDbManager<Msg> {
 
     private sortHelper(a:Msg, b:Msg):number {
         return new Date(a.time).getTime() - new Date(b.time).getTime();
-    }
-
-    private createDate():string {
-        let d = new Date();
-        return d.toISOString().split("").slice(0, 10).join("") + " " + d.toISOString().split("").slice(11, 19).join("");
     }
 }
 

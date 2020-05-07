@@ -12,7 +12,7 @@ export const innerMiddleware = async (req:Request, res:Response, next:NextFuncti
                 service_secret: req.query.secret,
                 token: req.query.token
             }),
-            uri: `http://localhost:${host.AUTH}/auth/service`
+            uri: `http://localhost:${host.AUTH.port}/auth/service`
         }).then(() => next());
     } else {
         return request({
@@ -22,7 +22,7 @@ export const innerMiddleware = async (req:Request, res:Response, next:NextFuncti
                 service_key: req.query.key,
                 service_secret: req.query.secret,
             },
-            uri: `http://localhost:${host.AUTH}/auth/service`,
+            uri: `http://localhost:${host.AUTH.port}/auth/service`,
             json: true
         }).then((result) => res.status(449).send(result))
     }

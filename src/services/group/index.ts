@@ -17,7 +17,7 @@ createConnection(user_database).then(() => {
     const controller = new GroupController(db_manager);
     groupRoutes(app, controller);
 
-    app.listen(host.GROUP, () => {
-        console.log(`API GROUP running in http://localhost:${host.GROUP}`);
+    app.listen(host.GROUP.port, () => {
+        console.log(`API ${host.GROUP.name} running in http://localhost:${host.GROUP.port}`);
     });
 });

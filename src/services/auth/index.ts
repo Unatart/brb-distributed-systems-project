@@ -17,7 +17,7 @@ createConnection(user_database).then(() => {
     const controller = new AuthController(db_manager);
     authRoutes(app, controller);
 
-    app.listen(host.AUTH, () => {
-        console.log(`API AUTH running in http://localhost:${host.AUTH}`);
+    app.listen(host.AUTH.port, () => {
+        console.log(`API ${host.AUTH.name} running in http://localhost:${host.AUTH.port}`);
     });
 });
