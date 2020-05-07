@@ -12,5 +12,7 @@ export const enum ErrorCodes {
     NO_SUCH_USER = "no such user, sign up pls",
     NO_SUCH_GROUP = "no such group",
     REQUIRE_TOKEN_AND_UID = "token and uid required",
-    ADMIN_ALLOWED = "only admin allowed"
+    ADMIN_ALLOWED = "only admin allowed",
+    THIRD_PARTY_NOT_ALLOWED = "3rd party app not allowed",
+    INCORRECT_AUTHORIZATION = "incorrect oauth authorization"
 }

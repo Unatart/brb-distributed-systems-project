@@ -33,6 +33,10 @@ export class AuthManager extends CommonDbManager<Auth> {
         const session = await this.repository.findOne({ where: { user_id: id, token: token }});
 
         if (session) {
+            if (session.app_id) {
+                throw Error(ErrorCodes.THIRD_PARTY_NOT_ALLOWED);
+            }
+
             if (!this.checkTime(session.expires)) {
                 throw Error(ErrorCodes.TOKEN_EXPIRED);
             }
@@ -133,6 +137,15 @@ export class AuthManager extends CommonDbManager<Auth> {
             });
             return await this.repository.save(find_same);
         }
+    }
+
+    public async checkForOauth(user_id:string, app_id:string, token:string) {
+        const find_same = await this.repository.findOne({where: {user_id: user_id, app_id: app_id, token: token}});
+        if (find_same) {
+            return find_same;
+        }
+
+        throw Error(ErrorCodes.INCORRECT_AUTHORIZATION);
     }
 
     private checkTime(expires:string) {

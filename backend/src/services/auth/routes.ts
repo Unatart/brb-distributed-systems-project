@@ -20,4 +20,6 @@ export const authRoutes = (app, controller) => {
     app.post("/oauth/", controller.createCode);
 
     app.post("/oauth/token", controller.getToken);
+
+    app.get("/oauth/", controller.checkOauthToken);
 };

@@ -168,7 +168,7 @@ export class AuthController extends CommonController<AuthManager> {
             const client_id = req.query.client_id as string;
             const client_secret = req.query.client_secret as string;
             const user_id = req.query.user_id as string;
-            const token = req.query.token as string;
+            const token = /<(.*?)>/.exec(req.header('authorization'))[1];
 
             const result = await this.db_manager.createCode(user_id, client_id, client_secret, token);
 
@@ -221,6 +221,29 @@ export class AuthController extends CommonController<AuthManager> {
                     .status(401)
                     .send(result);
             }
+        } catch (error) {
+            return res
+                .status(400)
+                .send(error.message);
+        }
+    };
+
+    public checkOauthToken = async (req:Request, res:Response) => {
+        try {
+            const user_id = req.body.user_id;
+            const token = req.body.token;
+            const app_id = req.body.app_id;
+
+            const result = await this.db_manager.checkForOauth(user_id, app_id, token);
+
+            if (result) {
+                return res
+                    .status(200)
+                    .send(result);
+            }
+            return res
+                .status(401)
+                .send(result);
         } catch (error) {
             return res
                 .status(400)
