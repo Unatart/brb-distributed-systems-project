@@ -1,0 +1,63 @@
+.main {
+    background-color: #ee693f;
+    width: 100vw;
+    height: 100vh;
+}
+
+.izum {
+    color: rgba(252, 253, 254, 0.55);
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+}
+
+.center {
+    position: absolute;
+    margin: 10% 60% 25%;
+    width: 50%;
+    height: 25%;
+    transform: translate(-50%, -50%);
+}
+
+.name {
+    font-family: 'Permanent Marker', sans-serif;
+    color: #fcfdfe;
+    font-size: 48px;
+    margin-bottom: 20%;
+    margin-left: 20%;
+    border-bottom: 2px dotted #fcfdfe;
+    width: 22%;
+    text-align: center;
+}
+
+.left {
+    font-family: 'Permanent Marker', sans-serif;
+    color: #ee693f;
+    font-size: 36px;
+    background-color: #fcfdfe;
+    padding: 5px;
+    margin-left: 50%;
+    width: 50%;
+    border-radius: 25px;
+}
+
+.left-writing {
+    font-family: 'Permanent Marker', sans-serif;
+    color: #ffd2c9;
+    font-size: 28px;
+    padding: 5px;
+    margin-left: 50%;
+    width: 50%;
+    border-radius: 25px;
+}
+
+.right {
+    font-family: 'Permanent Marker', sans-serif;
+    color: #ee693f;
+    font-size: 36px;
+    background-color: #fcfdfe;
+    padding: 5px;
+    margin-left: -50%;
+    width: 50%;
+    border-radius: 25px;
+}
