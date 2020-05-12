@@ -3,27 +3,25 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #f69454;
+    background-color: rgba(114, 62, 198, 0.85);
     font-family: 'Permanent Marker', sans-serif;
-    font-size: 36px;
-    border-bottom: 2px solid #fcfdfe;
+    font-size: 20px;
+    height: 7%;
 }
 
 li {
     float: right;
-    border-left: 1px solid #fcfdfe;
 }
 
 li a {
     display: block;
-    color: white;
+    color: #FDFFFC;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
 }
 
 li a:hover {
-    background-color: #fcfdfe;
-    color: #ee693f;
-    font-size: 38px;
+    color: #FDFFFC;
+    font-size: 24px;
 }
