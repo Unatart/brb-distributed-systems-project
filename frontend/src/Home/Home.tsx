@@ -8,7 +8,7 @@ export class Home extends React.Component {
         return (
             <>
                 <div className="main">
-                    <Navbar/>
+                    <Navbar auth={false}/>
                     <div className="hover-main">
                         <div className="center">
                             <p className="name">BRB chat</p>

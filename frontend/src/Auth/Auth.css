@@ -1,0 +1,40 @@
+.auth-form {
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    align-items:center;
+    margin-top: 20%;
+}
+
+.auth-form input {
+    background:transparent;
+    border:1px solid #FDFFFC;
+    padding: 20px 120px 25px 10px;
+    margin:5px;
+    color:#FDFFFC;
+    font-size:15px;
+    font-family: 'Permanent Marker', sans-serif;
+}
+
+.auth-form input:focus {
+    outline: none;
+}
+
+.auth-form input::placeholder {
+    color:#FDFFFC;
+}
+
+.auth-form input.submit-btn {
+    padding: 15px 90px
+}
+
+.auth-form input.submit-btn:hover {
+    background: rgba(114, 62, 198, 0.85);
+    color: white;
+}
+
+.link {
+    font-family: 'Permanent Marker', sans-serif;
+    color: white;
+    font-size: 12px;
+}

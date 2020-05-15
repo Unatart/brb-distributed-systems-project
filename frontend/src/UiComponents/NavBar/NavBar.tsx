@@ -1,14 +1,29 @@
 import React from "react"
+import {Link} from "react-router-dom";
 import "./NavBar.css";
 
-export function Navbar():JSX.Element {
+interface INavBarProps {
+    auth: boolean;
+}
+
+export function Navbar(props: INavBarProps):JSX.Element {
+    if (props.auth) {
+        return (
+            <ul>
+                <li>
+                    <Link to="/">Home</Link>
+                </li>
+            </ul>
+        );
+    }
+
     return (
         <ul>
             <li>
-                <a>Sign in</a>
+                <Link to="/sign_in">Sign in</Link>
             </li>
             <li>
-                <a>Sign out</a>
+                <Link to="/sign_up">Sign up</Link>
             </li>
         </ul>
     );
