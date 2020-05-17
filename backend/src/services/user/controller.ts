@@ -6,18 +6,13 @@ import {queue} from "../../common/queue";
 import {host} from "../../common/host_config";
 import {createDate} from "../../helpers";
 import {logInfo} from "../../common/logger";
-import * as _ from "underscore";
 
 
 export class UserController extends CommonController<UserManager> {
     public get = async (req:Request, res:Response) => {
         try {
+            console.log("get", req.params.id);
             const id = req.params.id;
-            if (this.uuid_regex.test(id)) {
-                return res
-                    .status(400)
-                    .send(ErrorCodes.UID_REGEX_MATCH);
-            }
 
             queue.push({
                 user_id: req.query.user_id as string,
@@ -29,7 +24,6 @@ export class UserController extends CommonController<UserManager> {
             });
 
             const result = await this.db_manager.get(id);
-
             logInfo("Get user", result);
             return res
                 .status(200)
@@ -115,13 +109,6 @@ export class UserController extends CommonController<UserManager> {
                 return res
                     .status(400)
                     .send(ErrorCodes.UID_REGEX_MATCH);
-            }
-
-            if (!this.password_regex.test(req.body.password)) {
-                logInfo("Update user failed", ErrorCodes.PASSWORD_REGEX_MATCH, true);
-                return res
-                    .status(400)
-                    .send(ErrorCodes.PASSWORD_REGEX_MATCH)
             }
 
             const result = await this.db_manager.update(req.params.id, req.body);

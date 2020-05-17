@@ -15,9 +15,6 @@ export class User {
     @Column({ nullable: true })
     email:string;
 
-    @Column({ nullable: true, length: 500 })
-    about_story:string;
-
     @Column({ nullable: true })
     admin?:boolean;
 

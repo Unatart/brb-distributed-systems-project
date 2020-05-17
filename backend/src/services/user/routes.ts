@@ -16,6 +16,8 @@ export const userRoutes = (app, controller) => {
 
     app.get("/users/check_many", innerMiddleware, controller.checkMany);
 
+    // public
+
     app.get("/users/:id", oauthOuterMiddleware, controller.get);
 
     app.patch("/users/:id", outerMiddleware, controller.update);

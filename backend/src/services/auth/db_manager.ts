@@ -37,14 +37,14 @@ export class AuthManager extends CommonDbManager<Auth> {
                 throw Error(ErrorCodes.THIRD_PARTY_NOT_ALLOWED);
             }
 
-            if (!this.checkTime(session.expires)) {
-                throw Error(ErrorCodes.TOKEN_EXPIRED);
+            if (this.checkTime(session.expires)) {
+                await this.repository.merge(session, {
+                    expires: createDate(true),
+                });
+                return await this.repository.save(session);
             }
 
-            await this.repository.merge(session, {
-                expires: createDate(true),
-            });
-            return await this.repository.save(session);
+            throw Error(ErrorCodes.TOKEN_EXPIRED);
         }
 
         throw Error(ErrorCodes.NO_SUCH_USER);
@@ -150,6 +150,7 @@ export class AuthManager extends CommonDbManager<Auth> {
     private checkTime(expires:string) {
         const curr_d = new Date(createDate());
         const d = new Date(expires);
+        console.log(curr_d, d);
         return curr_d.getTime() < d.getTime();
     }
 
