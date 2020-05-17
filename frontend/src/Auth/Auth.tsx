@@ -18,6 +18,7 @@ interface IAuthState {
     username:string,
     password:string,
     error?:string;
+    groups?:string;
 }
 
 export class Auth extends React.Component<IAuthFullProps, IAuthState> {
@@ -77,12 +78,12 @@ export class Auth extends React.Component<IAuthFullProps, IAuthState> {
 
             return fetch("http://localhost:3000/auth/user/", {
                 method: 'POST',
-                    mode: 'cors',
+                mode: 'cors',
                 credentials: "include",
                 headers: {
                 "Access-Control-Allow-Credentials": "true",
                     "Content-Type": "application/json"
-            },
+                },
                 body: JSON.stringify({name: this.state.username, password: this.state.password})
             })
                 .then((response) => response.json())

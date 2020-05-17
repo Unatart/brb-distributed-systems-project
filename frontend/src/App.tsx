@@ -3,6 +3,7 @@ import {Home} from "./Home/Home";
 import {HashRouter, Route, Switch} from "react-router-dom";
 import {CookieWorker} from "./helpers";
 import {AuthWithHistory} from "./Auth/Auth";
+import {Board} from "./Board/Board";
 
 interface IAppState {
     is_auth:boolean;
@@ -21,7 +22,7 @@ export class App extends React.Component<{}, IAppState> {
                 <Switch>
                     <Route exact path="/">
                         {this.state.is_auth
-                            ? <div/>
+                            ? <Board/>
                             : <Home/>
                         }
                     </Route>

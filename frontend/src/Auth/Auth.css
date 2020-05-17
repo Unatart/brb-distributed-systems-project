@@ -13,6 +13,7 @@
     margin:5px;
     color:#FDFFFC;
     font-size:15px;
+    width: 200px;
     font-family: 'Permanent Marker', sans-serif;
 }
 
@@ -24,11 +25,7 @@
     color:#FDFFFC;
 }
 
-.auth-form input.submit-btn {
-    padding: 15px 90px
-}
-
-.auth-form input.submit-btn:hover {
+.submit-btn:hover {
     background: rgba(114, 62, 198, 0.85);
     color: white;
 }

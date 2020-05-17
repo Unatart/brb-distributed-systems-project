@@ -1,0 +1,95 @@
+.container {
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Permanent Marker', sans-serif;
+    font-size: 20px;
+
+    display: grid;
+    grid-template-columns: 2fr 5fr;
+    grid-template-rows: 1fr 3fr 1fr;
+    grid-template-areas:
+            "user chat"
+            "contacts chat"
+            "contacts write"
+}
+
+.item-a {
+    grid-area: user;
+    margin:5px;
+}
+
+.item-b {
+    grid-area: contacts;
+    overflow-y: scroll;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.item-c {
+    grid-area: chat;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.text {
+    color: #FDFFFC;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+input {
+    background:transparent;
+    border:1px solid transparent;
+    width: 70%;
+    margin:5px;
+    color:#FDFFFC;
+    font-size:15px;
+    font-family: 'Permanent Marker', sans-serif;
+}
+
+input:hover {
+    outline: none;
+}
+
+textarea {
+    background:transparent;
+    border:1px solid transparent;
+    margin:5px;
+    width: 90%;
+    color:#FDFFFC;
+    font-size:15px;
+    font-family: 'Permanent Marker', sans-serif;
+    resize: none;
+}
+
+textarea:hover {
+    outline: none;
+}
+
+.msg {
+    background:transparent;
+    border:1px solid transparent;
+    margin:5px;
+    width: 95%;
+    color:#FDFFFC;
+    font-size:15px;
+    font-family: 'Permanent Marker', sans-serif;
+    resize: none;
+}
+
+.msg:focus {
+    outline: none;
+}
+
+.item-g {
+    grid-area: write;
+    background:transparent;
+    margin:5px;
+    color:#FDFFFC;
+    font-family: 'Permanent Marker', sans-serif;
+}
+
+.ready_msg {
+    background-color: lightblue;
+    border:1px solid transparent;
+    border-radius: 25px;
+}
+
