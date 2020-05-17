@@ -2,6 +2,7 @@ import {User} from "./entity";
 import {CommonDbManager} from "../../common/common_manager";
 import {ErrorCodes} from "../../common/error_codes";
 import {createHmac} from "crypto";
+import {In} from "typeorm";
 
 export class UserManager extends CommonDbManager<User> {
     public async get(id:string) {
@@ -11,6 +12,10 @@ export class UserManager extends CommonDbManager<User> {
         }
 
         throw Error(ErrorCodes.INCORRECT_UID);
+    }
+
+    public async getMany(names:string[]) {
+        return await this.repository.find({ where: { name: In(names) } });
     }
 
     public async set(body:any) {

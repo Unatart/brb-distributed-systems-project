@@ -42,7 +42,6 @@ export class AuthManager extends CommonDbManager<Auth> {
             }
 
             await this.repository.merge(session, {
-                token: this.token_gen.generate(),
                 expires: createDate(true),
             });
             return await this.repository.save(session);

@@ -3,10 +3,13 @@ import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 @Entity()
 export class Group {
     @PrimaryGeneratedColumn("uuid")
+    id:string;
+
+    @Column("uuid")
     group_id:string;
 
-    @Column({type: "simple-array"})
-    users:string[];
+    @Column()
+    user_id:string;
 
     @Column()
     name:string;

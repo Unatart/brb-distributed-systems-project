@@ -8,9 +8,16 @@ import {groupRoutes} from "./routes";
 import {GroupManager} from "./db_manager";
 import {GroupController} from "./controller";
 import {logInfo} from "../../common/logger";
+import cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
+
+app.use(cors({
+    exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar', "Access-Control-Allow-Credentials", "Content-Type"],
+    credentials: true,
+    origin: true
+}));
 
 const user_database = {...database, schema:"group", entities: [Group]};
 createConnection(user_database).then(() => {

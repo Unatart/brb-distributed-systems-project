@@ -1,4 +1,5 @@
 import {outerMiddleware} from "../../middlewares/outerMiddleware";
+import {innerMiddleware} from "../../middlewares/innerMiddleware";
 
 export const msgRoutes = (app, controller) => {
     app.get("/msg/:user_id/group/:group_id", outerMiddleware, controller.get);
@@ -6,4 +7,7 @@ export const msgRoutes = (app, controller) => {
     app.post("/msg/", outerMiddleware, controller.set);
 
     app.patch("/msg/:id", outerMiddleware, controller.update);
+
+    // private
+    app.delete("/msg/:group_id", innerMiddleware, controller.deleteByGroup);
 };

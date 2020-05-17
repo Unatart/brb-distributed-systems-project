@@ -66,7 +66,7 @@ class Queue {
 
             if ("message" in res && res.message) {
                 logQueue(`Message received and deleted from queue, message: ${res.message}.`);
-                callback(JSON.parse(res.message));
+                callback(res.message);
             } else {
                 logQueue("No messages for me...");
                 return;

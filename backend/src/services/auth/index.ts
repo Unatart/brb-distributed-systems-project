@@ -8,9 +8,16 @@ import {authRoutes} from "./routes";
 import {AuthController} from "./controller";
 import {AuthManager} from "./db_manager";
 import {logInfo} from "../../common/logger";
+import cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
+
+app.use(cors({
+    exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar', "Access-Control-Allow-Credentials", "Content-Type"],
+    credentials: true,
+    origin: true
+}));
 
 const user_database = {...database, schema:"auth", entities: [Auth]};
 createConnection(user_database).then(() => {

@@ -10,7 +10,7 @@ import {logInfo} from "../../common/logger";
 
 export class AuthController extends CommonController<AuthManager> {
     // USER
-    public signOut = async (req:Request, res:Response) => {
+    public signUp = async (req:Request, res:Response) => {
         try {
             const user_res = await request({
                 method: "POST",

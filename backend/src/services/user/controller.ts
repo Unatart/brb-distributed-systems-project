@@ -6,6 +6,7 @@ import {queue} from "../../common/queue";
 import {host} from "../../common/host_config";
 import {createDate} from "../../helpers";
 import {logInfo} from "../../common/logger";
+import * as _ from "underscore";
 
 
 export class UserController extends CommonController<UserManager> {
@@ -162,6 +163,30 @@ export class UserController extends CommonController<UserManager> {
                 return res
                     .status(200)
                     .send({ exist: true });
+            }
+
+            logInfo("Check user", { exist: false }, true);
+            return res
+                .status(404)
+                .send({ exist: false });
+        } catch (error) {
+            logInfo("Check user failed", error.message, true);
+            return res
+                .status(400)
+                .send(error.message);
+        }
+    };
+
+    public checkMany = async (req:Request, res:Response) => {
+        try {
+            const names:string[] = req.body.user_names;
+
+            const result = await this.db_manager.getMany(names);
+            if (result) {
+                logInfo("Check users", { exist: true });
+                return res
+                    .status(200)
+                    .send(result);
             }
 
             logInfo("Check user", { exist: false }, true);

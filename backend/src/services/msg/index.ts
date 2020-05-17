@@ -8,9 +8,16 @@ import {Msg} from "./entity";
 import {MsgController} from "./controller";
 import {msgRoutes} from "./routes";
 import {logInfo} from "../../common/logger";
+import cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
+
+app.use(cors({
+    exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar', "Access-Control-Allow-Credentials", "Content-Type"],
+    credentials: true,
+    origin: true
+}));
 
 const user_database = {...database, schema:"msg", entities: [Msg]};
 createConnection(user_database).then(() => {

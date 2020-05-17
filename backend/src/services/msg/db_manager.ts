@@ -29,6 +29,15 @@ export class MsgManager extends CommonDbManager<Msg> {
         }
     };
 
+    public async delete(group_id:string) {
+        return await this.repository
+            .createQueryBuilder()
+            .delete()
+            .from(Msg)
+            .where({ group_id: group_id })
+            .execute();
+    }
+
     private sortHelper(a:Msg, b:Msg):number {
         return new Date(a.time).getTime() - new Date(b.time).getTime();
     }

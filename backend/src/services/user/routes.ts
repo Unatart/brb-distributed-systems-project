@@ -5,10 +5,6 @@ import {host} from "../../common/host_config";
 import {NextFunction, Request, Response} from "express";
 
 export const userRoutes = (app, controller) => {
-    app.get("/users/:id", oauthOuterMiddleware, controller.get);
-
-    app.patch("/users/:id", outerMiddleware, controller.update);
-
     // ---- private ----
     // -- ONLY AUTH PASS --
     app.post("/users/", controller.set);
@@ -17,13 +13,19 @@ export const userRoutes = (app, controller) => {
     // -- ONLY AUTH PASS FINISH
 
     app.get("/users/check/:id", innerMiddleware, controller.check);
+
+    app.get("/users/check_many", innerMiddleware, controller.checkMany);
+
+    app.get("/users/:id", oauthOuterMiddleware, controller.get);
+
+    app.patch("/users/:id", outerMiddleware, controller.update);
 };
 
 const oauthOuterMiddleware = async (req:Request, res:Response, next:NextFunction) => {
     const app_id = req.query.app_id;
-    const token = /<(.*?)>/.exec(req.header('authorization'))[1];
     if (app_id) {
-        request({
+        const token = /<(.*?)>/.exec(req.header('authorization'))[1];
+        return request({
             method: "GET",
             headers: { 'Content-Type': 'application/json' },
             body: {

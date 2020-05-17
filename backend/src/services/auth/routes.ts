@@ -1,7 +1,7 @@
 export const authRoutes = (app, controller) => {
     // users
 
-    app.post("/auth/user/", controller.signOut);
+    app.post("/auth/user/", controller.signUp);
 
     app.post("/auth/user/login/", controller.signIn);
 

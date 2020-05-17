@@ -4,9 +4,16 @@ import {host} from "../../common/host_config";
 import {Request, Response} from "express";
 import * as request from "request-promise";
 import {logInfo} from "../../common/logger";
+import cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
+
+app.use(cors({
+    exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar', "Access-Control-Allow-Credentials", "Content-Type"],
+    credentials: true,
+    origin: true
+}));
 
 app.get("/users/:user_id", (req:Request, res:Response) => {
     return request({

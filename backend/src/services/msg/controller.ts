@@ -137,5 +137,20 @@ export class MsgController extends CommonController<MsgManager> {
         }
     };
 
+    public deleteByGroup = async (req:Request, res:Response) => {
+        try {
+            const result = await this.db_manager.delete(req.params.group_id);
+
+            return res
+                .status(200)
+                .send(result);
+        } catch (error) {
+            logInfo("Delete msg failed", error.message, true);
+            return res
+                .status(400)
+                .send(error.message);
+        }
+    };
+
     private token:string;
 }

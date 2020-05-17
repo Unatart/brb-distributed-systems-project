@@ -6,13 +6,15 @@ import {host} from "../../common/host_config";
 import {createDate, getThroughMiddleware} from "../../helpers";
 import {queue} from "../../common/queue";
 import {logInfo} from "../../common/logger";
+import * as _ from "underscore";
+import {User} from "../user/entity";
 
 export class GroupController extends CommonController<GroupManager> {
     public get = async (req:Request, res:Response) => {
         try {
             const id = req.params.id;
             if (this.uuid_regex.test(id)) {
-                const result = await this.db_manager.get(id);
+                const result = await this.db_manager.getByUserId(id);
                 queue.push({
                     user_id: req.query.user_id as string,
                     service_name: host.GROUP.name,
@@ -22,7 +24,7 @@ export class GroupController extends CommonController<GroupManager> {
                     extra: "getGroup"
                 });
 
-                logInfo("Get group", result);
+                logInfo("Get groups by user_id", result);
                 return res
                     .status(200)
                     .send(result);
@@ -41,11 +43,12 @@ export class GroupController extends CommonController<GroupManager> {
 
     public set = async (req:Request, res:Response) => {
         try {
-            const user = await getThroughMiddleware(req.body.user_id, `${host.USER.port}/users`, this.token);
-            this.token = user.token;
+            const users = await getThroughMiddleware(req.body.user_id, undefined, this.token, `${host.USER.port}/users/check_many`, req.body);
+            this.token = users.token;
+            if (users) {
+                const ids:string[] = _.map(users, (user:User) => user.user_id).slice(0, -1);
 
-            if (user.exist === true) {
-                const result = await this.db_manager.set(req.body);
+                const result = await this.db_manager.set(req.body.name, ids);
 
                 queue.push({
                     user_id: req.query.user_id as string,
@@ -62,10 +65,10 @@ export class GroupController extends CommonController<GroupManager> {
                     .send(result);
             }
 
-            logInfo("Set group failed", user, true);
+            logInfo("Set group failed", users, true);
             return res
                 .status(404)
-                .send(user)
+                .send(users)
         } catch (error) {
             logInfo("Set group failed", error.message, true);
             return res
@@ -115,20 +118,23 @@ export class GroupController extends CommonController<GroupManager> {
                     .send(ErrorCodes.UID_REGEX_MATCH);
             }
 
-            const result = await this.db_manager.delete(req.params.id);
-            queue.push({
-                user_id: req.query.user_id as string,
-                service_name: host.GROUP.name,
-                method: "DELETE",
-                time: createDate(),
-                body: req.body,
-                extra: "deleteGroup"
-            });
+            const group = await getThroughMiddleware(req.params.id, `${host.MSG.port}/msg/`, this.token, `http://localhost:${host.MSG.port}/msg/${req.params.id}`);
+            if (group.token) {
+                const result = await this.db_manager.delete(req.params.id);
+                queue.push({
+                    user_id: req.query.user_id as string,
+                    service_name: host.GROUP.name,
+                    method: "DELETE",
+                    time: createDate(),
+                    body: req.body,
+                    extra: "deleteGroup"
+                });
 
-            logInfo("Delete group", req.params.id, true)
-            return res
-                .status(200)
-                .send(result)
+                logInfo("Delete group", req.params.id, true);
+                return res
+                    .status(200)
+                    .send(result);
+            }
         } catch (error) {
             logInfo("Delete group failed", error.message, true);
             return res

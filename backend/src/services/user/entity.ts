@@ -15,13 +15,10 @@ export class User {
     @Column({ nullable: true })
     email:string;
 
-    @Column({ nullable: true })
-    photo_url:string;
-
     @Column({ nullable: true, length: 500 })
     about_story:string;
 
-    @Column()
+    @Column({ nullable: true })
     admin?:boolean;
 
     @BeforeInsert()
