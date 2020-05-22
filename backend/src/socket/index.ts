@@ -4,25 +4,18 @@ const io = require('socket.io')(http)
 
 const port:number = 3010;
 
-io.on('connection', client => {
-    let addedUser = false
+io.on('connection', (socket) => {
+    const group_id = socket.handshake.query.group_id;
+    console.log("GROUP: ", group_id);
+    socket.join(group_id);
 
-    client.on('new user', username => {
-        if (addedUser) return
-
-        client.username = username
-        addedUser = true
-        console.log(`${client.username} joined`)
-        client.broadcast.emit('user join', { username: client.username })
-    })
-
-    client.on('new message', data => {
+    socket.on('new message', (data) => {
         console.log('MSG: ', data)
-        io.emit('new message', { message: data })
+        io.to(group_id).emit('new message', { message: data })
     })
 
-    client.on('disconnect', () => {
-        console.log(`${client.username} has disconnected`)
+    socket.on('disconnect', () => {
+        console.log(`${socket.username} has disconnected`)
     })
 })
 
