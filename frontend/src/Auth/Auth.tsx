@@ -21,6 +21,8 @@ interface IAuthState {
     groups?:string;
 }
 
+
+// TODO: Добавить обработку ошибок
 export class Auth extends React.Component<IAuthFullProps, IAuthState> {
     public state:IAuthState = {
         username: "",

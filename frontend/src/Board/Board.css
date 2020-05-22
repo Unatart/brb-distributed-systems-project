@@ -6,11 +6,12 @@
 
     display: grid;
     grid-template-columns: 2fr 5fr;
-    grid-template-rows: 1fr 3fr 1fr;
+    grid-template-rows: 1fr 2fr 1fr 6fr;
     grid-template-areas:
+            "user chat_name"
             "user chat"
+            "find chat"
             "contacts chat"
-            "contacts write"
 }
 
 .item-a {
@@ -26,7 +27,17 @@
 
 .item-c {
     grid-area: chat;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(0, 0, 0, 0.44);
+}
+
+.item-f {
+    grid-area: find;
+    border: 1px solid white;
+}
+
+.item-d {
+    grid-area: chat_name;
+    border: 1px solid white;
 }
 
 .text {
@@ -77,14 +88,6 @@ textarea:hover {
 
 .msg:focus {
     outline: none;
-}
-
-.item-g {
-    grid-area: write;
-    background:transparent;
-    margin:5px;
-    color:#FDFFFC;
-    font-family: 'Permanent Marker', sans-serif;
 }
 
 .ready_msg {
