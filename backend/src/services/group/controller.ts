@@ -41,6 +41,37 @@ export class GroupController extends CommonController<GroupManager> {
         }
     };
 
+    public getMembers = async (req:Request, res:Response) => {
+        try {
+            const id = req.params.id;
+            if (this.uuid_regex.test(id)) {
+                const result = await this.db_manager.getMembers(id);
+                queue.push({
+                    user_id: req.query.user_id as string,
+                    service_name: host.GROUP.name,
+                    method: "GET",
+                    time: createDate(),
+                    body: req.body,
+                    extra: "getGroupMembers"
+                });
+
+                logInfo("Get groups by user_id", result);
+                return res
+                    .status(200)
+                    .send(result);
+            }
+            logInfo("Get group members failed", ErrorCodes.UID_REGEX_MATCH, true);
+            return res
+                .status(400)
+                .send(ErrorCodes.UID_REGEX_MATCH);
+        } catch (error) {
+            logInfo("Get group failed", error.message, true);
+            return res
+                .status(404)
+                .send(error.message);
+        }
+    };
+
     public set = async (req:Request, res:Response) => {
         try {
             const users = await getThroughMiddleware(req.body.user_id, undefined, this.token, `${host.USER.port}/users/check_many`, req.body);

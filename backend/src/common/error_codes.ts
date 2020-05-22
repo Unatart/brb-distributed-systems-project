@@ -14,5 +14,6 @@ export const enum ErrorCodes {
     REQUIRE_TOKEN_AND_UID = "token and uid required",
     ADMIN_ALLOWED = "only admin allowed",
     THIRD_PARTY_NOT_ALLOWED = "3rd party app not allowed",
-    INCORRECT_AUTHORIZATION = "incorrect oauth authorization"
+    INCORRECT_AUTHORIZATION = "incorrect oauth authorization",
+    GROUP_NAME_EXISTS = "group with such name already exists"
 }

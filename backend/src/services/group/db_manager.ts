@@ -1,6 +1,7 @@
 import {CommonDbManager} from "../../common/common_manager";
 import {ErrorCodes} from "../../common/error_codes";
 import {Group} from "./entity";
+import * as _ from "underscore";
 
 export class GroupManager extends CommonDbManager<Group> {
     public async get(id:string) {
@@ -21,8 +22,26 @@ export class GroupManager extends CommonDbManager<Group> {
         throw Error(ErrorCodes.NO_SUCH_GROUP);
     }
 
+    public async getMembers(id:string) {
+        const groups = await this.repository.find({ where: { group_id: id } });
+        if (!groups) {
+            throw Error(ErrorCodes.NO_SUCH_GROUP);
+        }
+
+        const users = _.map(groups, (group) => {
+            return group.user_id;
+        });
+
+        return users;
+    }
+
     public async set(name:string, ids:string[]) {
         let groups = [];
+
+        const group = await this.repository.findOne({ where: { name: name, user_id: ids[0] } });
+        if (group) {
+            throw Error(ErrorCodes.GROUP_NAME_EXISTS);
+        }
 
         const uid = this.create_UUID();
 
