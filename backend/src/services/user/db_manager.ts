@@ -18,6 +18,23 @@ export class UserManager extends CommonDbManager<User> {
         return await this.repository.find({ where: { name: In(names) } });
     }
 
+    public async convertIds(ids:string[]):Promise<any> {
+        const users = await this.repository.find({ where: {user_id: In(ids) } });
+        if (users) {
+            const map = {};
+
+            for (let i = 0; i < users.length; i++) {
+                if (!map[users[i].user_id]) {
+                    map[users[i].user_id] = users[i].name;
+                }
+            }
+
+            return map;
+        }
+
+        throw Error(ErrorCodes.NO_SUCH_USER);
+    }
+
     public async set(body:any) {
         const existed = await this.repository.findOne({ where: { name: body.name } });
         if (existed) {

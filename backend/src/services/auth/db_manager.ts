@@ -74,7 +74,10 @@ export class AuthManager extends CommonDbManager<Auth> {
 
         if (session) {
             if (this.checkTime(session.expires)) {
-                return session;
+                await this.repository.merge(session, {
+                    expires: createDate(true),
+                });
+                return await this.repository.save(session);
             }
 
             throw Error(ErrorCodes.TOKEN_EXPIRED);

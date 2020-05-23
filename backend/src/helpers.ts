@@ -1,7 +1,7 @@
 import {host} from "./common/host_config";
 import * as request from "request-promise";
 
-export const getThroughMiddleware = async (id:string, substring:string, token:string, begin_url?:string, body?:any) => {
+export const getThroughMiddleware = async (id:string, substring:string, token:string, begin_url?:string, body?:any, method?:string) => {
     const uri = begin_url ||`${substring}/check/${id}`
     const full_uri = `${uri}/?token=${token}&key=${process.env.KEY}&secret=${process.env.SECRET}`;
 
@@ -51,6 +51,7 @@ export const getThroughMiddleware = async (id:string, substring:string, token:st
 
 export function createDate(db?:boolean):string {
     let d = new Date();
+    d.setHours(d.getHours() + 3);
     if (db) {
         d.setMinutes(d.getMinutes() + 30);
     }

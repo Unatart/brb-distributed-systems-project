@@ -188,6 +188,29 @@ export class UserController extends CommonController<UserManager> {
         }
     };
 
+    public convertIds = async (req:Request, res:Response) => {
+        try {
+            const ids:string[] = req.body.ids;
+            const map_id_name = await this.db_manager.convertIds(ids);
+            if (map_id_name) {
+                logInfo("Convert ids users", map_id_name);
+                return res
+                    .status(200)
+                    .send(map_id_name);
+            }
+
+            logInfo("Convert ids user", map_id_name, true);
+            return res
+                .status(404)
+                .send(map_id_name);
+        } catch (error) {
+            logInfo("Convert user ids failed", error.message, true);
+            return res
+                .status(400)
+                .send(error.message);
+        }
+    };
+
     /**
      * должен содержать хотя бы одну цифру,
      * хотя бы одну строчную лат. букву,

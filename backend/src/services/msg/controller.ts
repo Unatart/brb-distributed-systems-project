@@ -6,14 +6,24 @@ import {host} from "../../common/host_config";
 import {createDate, getThroughMiddleware} from "../../helpers";
 import {queue} from "../../common/queue";
 import {logInfo} from "../../common/logger";
+import {Msg} from "./entity";
 
 export class MsgController extends CommonController<MsgManager> {
     public get = async (req:Request, res:Response) => {
         try {
-            const uuid = req.params.user_id;
             const guid = req.params.group_id;
-            if (this.uuid_regex.test(uuid) && this.uuid_regex.test(guid)) {
-                const result = await this.db_manager.get(uuid, guid);
+            if (this.uuid_regex.test(guid)) {
+                const messages:Msg[] = await this.db_manager.get(guid, +req.query.to, +req.query.from);
+                const ids:string[] = messages.map((record) => record.user_id);
+                const map = await getThroughMiddleware(undefined, undefined, this.token, `${host.USER.port}/convert_users`, {ids: ids});
+
+                const result = [];
+                for (let i = 0; i < messages.length; i++) {
+                    result.push({
+                        ...messages[i],
+                        user_name: map[messages[i].user_id]
+                    });
+                }
 
                 queue.push({
                     user_id: req.query.user_id as string,

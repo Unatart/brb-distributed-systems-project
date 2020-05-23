@@ -7,7 +7,8 @@ import {NextFunction, Request, Response} from "express";
 export const userRoutes = (app, controller) => {
     // ---- private ----
     // -- ONLY AUTH PASS --
-    app.post("/users/", controller.set);
+
+    app.post("/users", controller.set);
 
     app.get("/users/",  controller.getByNameAndPassword);
     // -- ONLY AUTH PASS FINISH
@@ -15,6 +16,8 @@ export const userRoutes = (app, controller) => {
     app.get("/users/check/:id", innerMiddleware, controller.check);
 
     app.get("/users/check_many", innerMiddleware, controller.checkMany);
+
+    app.get("/convert_users", innerMiddleware, controller.convertIds);
 
     // public
 

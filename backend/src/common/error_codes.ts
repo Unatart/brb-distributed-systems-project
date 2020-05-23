@@ -15,5 +15,6 @@ export const enum ErrorCodes {
     ADMIN_ALLOWED = "only admin allowed",
     THIRD_PARTY_NOT_ALLOWED = "3rd party app not allowed",
     INCORRECT_AUTHORIZATION = "incorrect oauth authorization",
-    GROUP_NAME_EXISTS = "group with such name already exists"
+    GROUP_NAME_EXISTS = "group with such name already exists",
+    ERROR_403 = "authentication error"
 }

@@ -2,7 +2,7 @@ import {outerMiddleware} from "../../middlewares/outerMiddleware";
 import {innerMiddleware} from "../../middlewares/innerMiddleware";
 
 export const msgRoutes = (app, controller) => {
-    app.get("/msg/:user_id/group/:group_id", outerMiddleware, controller.get);
+    app.get("/msg/:group_id", outerMiddleware, controller.get);
 
     app.post("/msg/", outerMiddleware, controller.set);
 

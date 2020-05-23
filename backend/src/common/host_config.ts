@@ -24,6 +24,9 @@ export const host = {
     GATEWAY: {
         port: 3005,
         name: "GATEWAY"
+    },
+    SOCKET: {
+        port: 3010
     }
 };
 
