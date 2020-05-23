@@ -75,7 +75,11 @@ export class Board extends React.Component<{}, IBoardState> {
                             {this.state.current_group?.name}
                         </div>
                         <div className="item-c">
-                            {this.state.current_group && <Chat current_group={this.state.current_group}/>}
+                            {this.state.current_group && this.state.name &&
+                            <Chat
+                                current_group={this.state.current_group}
+                                user_name={this.state.name}
+                            />}
                         </div>
                     </div>
                 </div>

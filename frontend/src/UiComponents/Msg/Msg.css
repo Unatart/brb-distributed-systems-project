@@ -1,0 +1,24 @@
+.message {
+    margin-left: 10px;
+    display: grid;
+    grid-template-rows: 1fr 2fr 1fr ;
+    grid-template-areas:
+            "user_name"
+            "msg"
+            "time"
+}
+
+.name {
+    grid-area: user_name;
+    font-size: 14px;
+}
+
+.msg {
+    grid-area: msg;
+    font-size: 16px;
+}
+
+.time {
+    grid-area: time;
+    font-size: 12px;
+}
