@@ -31,9 +31,10 @@ io
         const user_id = socket.handshake.query.user_id;
         const token = socket.handshake.query.token;
 
-        logInfo(`NEW GROUP: ${group_id}.`);
         logInfo(`USER NAME AND ID: ${user_name}, ${user_id}.`);
+
         socket.join(group_id);
+        logInfo(`NEW GROUP: ${group_id}.`);
 
         socket.on('new message', (data) => {
             logInfo(`Msg from ${user_id}: ${data}.`);
@@ -51,8 +52,9 @@ io
             }).then((result) => io.to(group_id).emit('new message', { message: data, user_name: user_name, time: time, id: result.msg_id }))
         });
 
-        socket.on('disconnect', () => {
+        socket.on('close', () => {
             logInfo(`${user_name} has disconnected.`);
+            socket.close();
         });
 });
 

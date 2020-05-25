@@ -14,30 +14,36 @@ export class MsgController extends CommonController<MsgManager> {
             const guid = req.params.group_id;
             if (this.uuid_regex.test(guid)) {
                 const messages:Msg[] = await this.db_manager.get(guid, +req.query.to, +req.query.from);
-                const ids:string[] = messages.map((record) => record.user_id);
-                const map = await getThroughMiddleware(undefined, undefined, this.token, `${host.USER.port}/convert_users`, {ids: ids});
+                if (messages.length) {
+                    const ids:string[] = messages.map((record) => record.user_id);
+                    const map = await getThroughMiddleware(undefined, undefined, this.token, `${host.USER.port}/convert_users`, { ids: ids });
 
-                const result = [];
-                for (let i = 0; i < messages.length; i++) {
-                    result.push({
-                        ...messages[i],
-                        user_name: map[messages[i].user_id]
+                    const result = [];
+                    for (let i = 0; i < messages.length; i++) {
+                        result.push({
+                            ...messages[i],
+                            user_name: map[messages[i].user_id]
+                        });
+                    }
+
+                    queue.push({
+                        user_id: req.query.user_id as string,
+                        service_name: host.MSG.name,
+                        method: "GET",
+                        time: createDate(),
+                        body: req.body,
+                        extra: "getMsg"
                     });
+
+                    logInfo("Get msg", result);
+                    return res
+                        .status(200)
+                        .send(result);
                 }
 
-                queue.push({
-                    user_id: req.query.user_id as string,
-                    service_name: host.MSG.name,
-                    method: "GET",
-                    time: createDate(),
-                    body: req.body,
-                    extra: "getMsg"
-                });
-
-                logInfo("Get msg", result);
                 return res
                     .status(200)
-                    .send(result);
+                    .send([]);
             }
             logInfo("Get msg failed", ErrorCodes.UID_REGEX_MATCH, true);
             return res
