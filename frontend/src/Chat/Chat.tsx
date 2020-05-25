@@ -35,39 +35,58 @@ export class Chat extends React.Component<IChatProps, IChatState> {
 
         this.state = { messages: [] };
     }
-
     public componentDidMount():void {
-        this.requester.getMessagesForGroup(this.props.current_group.id, this.to)
-            .then((data) => {
-                const msg:IMsgProps[] = data.map((record:any) => (
-                    {
-                        user_name: record.user_name,
-                        text: record.text,
-                        time: record.time,
-                        id: record.msg_id
-                    }
-                ));
-
-                this.setState({ messages: msg });
-                this.scrollToBottom();
-            });
+        this.setGroup();
 
         this.socket.on('new message', ((data:any) => {
-            this.setState({ text: '', messages: [...this.state.messages, { user_name: data.user_name, text: data.message, time: data.time, id: data.id }] });
+            this.setState({
+                text: '',
+                messages: [...this.state.messages, { user_name: data.user_name, text: data.message, time: data.time, id: data.id }]
+            });
         }));
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps:Readonly<IChatProps>, prevState:Readonly<IChatState>, snapshot?:any) {
+        if (prevProps.current_group.id !== this.props.current_group.id) {
+            this.socket.emit('close');
+            this.socket = io(`http://localhost:3010`, {
+                query: {
+                    group_id: this.props.current_group.id,
+                    user_id: this.cookie_worker.get("uid"),
+                    token: this.cookie_worker.get("token"),
+                    user_name: this.props.user_name
+                },
+                forceNew: true
+            });
+            this.socket.on('new message', ((data:any) => {
+                if (this.state.messages[this.state.messages.length - 1].id !== data.id) {
+                    this.setState({ text: '',
+                        messages: [...this.state.messages, {
+                            user_name: data.user_name,
+                            text: data.message,
+                            time: data.time,
+                            id: data.id
+                        }]
+                    });
+                }
+            }));
+            this.setGroup();
+        }
+
         if (this.scroll) {
             this.scrollToBottom();
         }
+    }
+
+    componentWillUnmount() {
+        this.socket.emit('disconnect');
     }
 
     public render():React.ReactNode {
         return (
             <div className="container-chat">
                 <div className="item-m">
-                    {<div onClick={this.addMsg}>load more</div>}
+                    {this.state.messages.length > 8 && <div className="load" onClick={this.addMsg}>load more</div>}
                     {this.state.messages.map((msg, ind) =>
                         <Msg
                             key={ind}
@@ -136,6 +155,23 @@ export class Chat extends React.Component<IChatProps, IChatState> {
     private scrollToBottom = () => {
         this.messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     };
+
+    private setGroup() {
+        this.requester.getMessagesForGroup(this.props.current_group.id, this.to)
+            .then((data) => {
+                const msg:IMsgProps[] = data.map((record:any) => (
+                    {
+                        user_name: record.user_name,
+                        text: record.text,
+                        time: record.time,
+                        id: record.msg_id
+                    }
+                ));
+
+                this.setState({ messages: msg });
+                this.scrollToBottom();
+            });
+    }
 
     private scroll:boolean = true;
     private to:number = 10;

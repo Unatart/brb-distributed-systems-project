@@ -3,25 +3,25 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: rgba(114, 62, 198, 0.85);
-    font-family: 'Permanent Marker', sans-serif;
+    font-family: 'Montserrat Alternates', sans-serif;
     font-size: 20px;
     height: 7%;
 }
 
 li {
     float: right;
+    margin-top: 7px;
 }
 
 li a {
     display: block;
-    color: #FDFFFC;
+    color: rgba(163,117,133,1);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
 }
 
 li a:hover {
-    color: #FDFFFC;
-    font-size: 24px;
+    color: #ffffff;
+    font-size: 26px;
 }

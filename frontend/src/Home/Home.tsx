@@ -11,7 +11,7 @@ export class Home extends React.Component {
                     <Navbar auth={false}/>
                     <div className="hover-main">
                         <div className="center">
-                            <p className="app_name">BRB chat</p>
+                            <p className="app_name">Chat App</p>
                             <p className="left">Hello, Marie!</p>
                             <p className="right">Ola, Brian :D</p>
                             <p className="left">How was the lecture today?</p>

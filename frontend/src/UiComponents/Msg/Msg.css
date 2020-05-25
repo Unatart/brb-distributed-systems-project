@@ -1,4 +1,6 @@
 .message {
+    color: dimgray;
+    background-color: rgba(105, 105, 105, 0.03);
     margin-left: 10px;
     display: grid;
     grid-template-rows: 1fr 2fr 1fr ;
@@ -16,6 +18,7 @@
 .msg {
     grid-area: msg;
     font-size: 16px;
+    color: dimgray;
 }
 
 .time {

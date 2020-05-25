@@ -1,5 +1,11 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
 .main {
-    background-image: url("img/back.png");
+    background: rgb(42,34,34);
+    background: linear-gradient(180deg, rgba(42,34,34,1) 0%, rgba(112,36,74,1) 35%, rgba(163,117,133,1) 100%);
     background-size: cover;
     background-repeat: no-repeat;
     width: 100vw;
@@ -7,7 +13,6 @@
 }
 
 .hover-main {
-    background-color: rgba(255, 255, 255, 0.3);
     display: inline-block;
     width: 100vw;
     height: 100vh;
@@ -22,25 +27,27 @@
 }
 
 .app_name {
-    font-family: 'Permanent Marker', sans-serif;
-    color: #FDFFFC;
+    font-family: 'Montserrat Alternates', sans-serif;
     font-size: 36px;
     margin-bottom: 20%;
     margin-left: 20%;
-    border-bottom: 2px dotted #FDFFFC;
+    border-bottom: 2px dotted rgba(163,117,133,1);
     width: 22%;
     text-align: center;
+    color: rgba(163,117,133,1);
 }
 
 .left {
-    font-family: 'Permanent Marker', sans-serif;
-    color: #FDFFFC;
+    font-family: 'Montserrat Alternates', sans-serif;
+    color: rgba(163,117,133,1);
     font-size: 24px;
-    background-color: rgba(172, 204, 208, 0.75);
+    background-color: rgba(255, 255, 255, 0.75);
     padding: 5px;
     margin-left: 50%;
+    margin-bottom: 5%;
     width: 50%;
     border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .left:hover {
@@ -48,8 +55,8 @@
 }
 
 .left-writing {
-    font-family: 'Permanent Marker', sans-serif;
-    color: #FDFFFC;
+    font-family: 'Montserrat Alternates', sans-serif;
+    color: rgba(163,117,133,1);
     font-size: 20px;
     padding: 5px;
     margin-left: 50%;
@@ -57,14 +64,15 @@
 }
 
 .right {
-    font-family: 'Permanent Marker', sans-serif;
-    color: #FDFFFC;
+    font-family: 'Montserrat Alternates', sans-serif;
+    color: rgba(163,117,133,1);
     font-size: 24px;
-    background-color: rgba(193, 125, 214, 0.75);
+    background-color: rgba(255, 255, 255, 0.75);
     padding: 5px;
-    margin-left: -50%;
+    margin-left: -40%;
     width: 50%;
     border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .right:hover {

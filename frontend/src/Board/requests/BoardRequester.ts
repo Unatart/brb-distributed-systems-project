@@ -97,6 +97,27 @@ export class BoardRequester {
             })
     }
 
+    public updateGroupName(group_id:string, new_name:string) {
+        return fetch(`http://localhost:3003/groups/${group_id}/?user_id=${this.uid}`,
+            {
+                method: "PATCH",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                    "Access-Control-Allow-Credentials": "true",
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer <" + this.token + ">"
+                },
+                body: JSON.stringify({ name: new_name })
+            })
+            .then((res) => {
+                if (res.status === 401) {
+                    this.cookie_worker.deleteAllCookies();
+                }
+                return res.json();
+            })
+    }
+
     private cookie_worker = new CookieWorker();
     private uid = this.cookie_worker.get("uid");
     private token = this.cookie_worker.get("token");
