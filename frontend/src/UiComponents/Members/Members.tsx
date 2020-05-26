@@ -18,8 +18,8 @@ export function MembersMenu(props:IMembersMenuProps) {
         <div className="dropdown">
             <button className="dropbtn">Members</button>
             <div className="dropdown-content">
-                {props.users.map((user) =>
-                    <div>{user.name}</div>
+                {props.users.map((user, id) =>
+                    <div key={id}>{user.name}</div>
                 )}
             </div>
         </div>

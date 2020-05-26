@@ -2,8 +2,9 @@ import * as React from "react";
 import "./Board.css";
 import {Requester} from "../requests/Requester";
 import {Chat} from "../Chat/Chat";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {MembersMenu, User} from "../UiComponents/Members/Members";
+import {CookieWorker} from "../helpers";
 
 export interface Group {
     id:string,
@@ -22,8 +23,16 @@ interface IBoardState {
     group_members?:User[];
 }
 
+interface IBoardProps {
+    update_handler:() => void;
+}
+
+interface IBoardFullProps extends IBoardProps {
+    history:any;
+}
+
 // TODO: Добавить обработку ошибок
-export class Board extends React.Component<{}, IBoardState> {
+export class Board extends React.Component<IBoardFullProps, IBoardState> {
     public state:IBoardState = {}
     public componentDidMount() {
         this.requester.getUserInfo().then((data) => this.setState({ name: data.name, email: data.email }))
@@ -47,7 +56,7 @@ export class Board extends React.Component<{}, IBoardState> {
                 <div className="hover-main">
                     <div className="container">
                         <div className="item-extra">
-                            <Link to="/">Log Out</Link>
+                            <Link to="/" onClick={this.logout}>Log Out</Link>
                         </div>
                         <div className="item-a">
                             <div className="text">Username:</div>
@@ -88,11 +97,11 @@ export class Board extends React.Component<{}, IBoardState> {
                         <div className="item-b">
                             <div className="text macro"> Group list: </div>
                             {this.state.groups && this.state.groups.map((group, key) =>
-                                <div className="contact-block">
-                                    <div className="text contact" key={key} onClick={() => this.setGroup(group)}>
+                                <div className="contact-block" key={key + "parent"}>
+                                    <div className="text contact" key={key + "name"} onClick={() => this.setGroup(group)}>
                                         {group.name}
                                     </div>
-                                    <div className="cross" onClick={() => this.deleteGroup(group)}>☓</div>
+                                    <div className="cross" key={key + "delete"} onClick={() => this.deleteGroup(group)}>☓</div>
                                 </div>
                             )}
                         </div>
@@ -208,5 +217,20 @@ export class Board extends React.Component<{}, IBoardState> {
         }
     }
 
+    private logout = () => {
+        this.cookie_worker.deleteAllCookies();
+        this.props.history.push("/");
+        this.props.update_handler();
+    }
+
     private requester = new Requester();
+    private cookie_worker = new CookieWorker();
+}
+
+export function BoardWithHistory(props:IBoardProps) {
+    let history = useHistory();
+
+    return (
+        <Board history={history} {...props}/>
+    );
 }
