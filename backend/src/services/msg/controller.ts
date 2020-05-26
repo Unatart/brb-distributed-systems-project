@@ -67,37 +67,29 @@ export class MsgController extends CommonController<MsgManager> {
                     .send(ErrorCodes.UID_REGEX_MATCH);
             }
 
-            const user = await getThroughMiddleware(body.user_id, `${host.USER.port}/users`, this.token);
-            this.token = user.token;
-            if (user.exist === true) {
-                const group = await getThroughMiddleware(body.group_id, `${host.GROUP.port}/groups`, this.token);
-                if (group.exist === true) {
-                    const result = await this.db_manager.set(body);
+            const group = await getThroughMiddleware(body.group_id, `${host.GROUP.port}/groups`, this.token);
+            if (group.exist === true) {
+                const result = await this.db_manager.set(body);
 
-                    queue.push({
-                        user_id: req.query.user_id as string,
-                        service_name: host.MSG.name,
-                        method: "POST",
-                        time: createDate(),
-                        body: req.body,
-                        extra: "setMsg"
-                    });
+                queue.push({
+                    user_id: req.query.user_id as string,
+                    service_name: host.MSG.name,
+                    method: "POST",
+                    time: createDate(),
+                    body: req.body,
+                    extra: "setMsg"
+                });
 
-                    logInfo("Set msg", result);
+                logInfo("Set msg", result);
 
-                    return res
-                        .status(200)
-                        .send(result);
-                }
-                logInfo("Set msg failed", "Group didn't exist", true);
                 return res
-                    .status(404)
-                    .send(group)
+                    .status(200)
+                    .send(result);
             }
-            logInfo("Set msg failed", "User didn't exist", true);
+            logInfo("Set msg failed", "Group didn't exist", true);
             return res
                 .status(404)
-                .send(user)
+                .send(group)
         } catch (error) {
             logInfo("Set msg failed", error.message, true);
             return res

@@ -28,11 +28,9 @@ export class GroupManager extends CommonDbManager<Group> {
             throw Error(ErrorCodes.NO_SUCH_GROUP);
         }
 
-        const users = _.map(groups, (group) => {
+        return _.map(groups, (group) => {
             return group.user_id;
         });
-
-        return users;
     }
 
     public async set(name:string, ids:string[]) {

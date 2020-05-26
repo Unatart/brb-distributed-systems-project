@@ -6,7 +6,7 @@ export const getThroughMiddleware = async (id:string, substring:string, token:st
     const full_uri = `${uri}/?token=${token}&key=${process.env.KEY}&secret=${process.env.SECRET}`;
 
     return request({
-        method: "GET",
+        method: method || "GET",
         headers: { 'Content-Type': 'application/json' },
         uri: `http://localhost:${full_uri}`,
         json: true,
@@ -20,7 +20,7 @@ export const getThroughMiddleware = async (id:string, substring:string, token:st
             switch (status) {
                 case "449":
                     return request({
-                        method: "GET",
+                        method: method || "GET",
                         headers: { 'Content-Type': 'application/json' },
                         uri: `http://localhost:${uri}/?token=${token}&key=${process.env.KEY}&secret=${process.env.SECRET}`,
                         json: true,
@@ -38,7 +38,7 @@ export const getThroughMiddleware = async (id:string, substring:string, token:st
                         json: true
                     }).then((response) => {
                         request({
-                            method: "GET",
+                            method: method || "GET",
                             headers: { 'Content-Type': 'application/json' },
                             uri: `http://localhost:${uri}/?token=${response.token}&key=${process.env.KEY}&secret=${process.env.SECRET}`,
                             json: true,

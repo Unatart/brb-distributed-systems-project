@@ -55,7 +55,7 @@ export class GroupController extends CommonController<GroupManager> {
                     extra: "getGroupMembers"
                 });
 
-                logInfo("Get groups by user_id", result);
+                logInfo("Get group members", result);
                 return res
                     .status(200)
                     .send(result);
@@ -142,6 +142,7 @@ export class GroupController extends CommonController<GroupManager> {
 
     public delete = async (req:Request, res:Response) => {
         try {
+            console.log(req.params.id);
             if (!this.uuid_regex.test(req.params.id)) {
                 logInfo("Delete group failed", ErrorCodes.UID_REGEX_MATCH, true);
                 return res
@@ -149,7 +150,7 @@ export class GroupController extends CommonController<GroupManager> {
                     .send(ErrorCodes.UID_REGEX_MATCH);
             }
 
-            const group = await getThroughMiddleware(req.params.id, `${host.MSG.port}/msg/`, this.token, `http://localhost:${host.MSG.port}/msg/${req.params.id}`);
+            const group = await getThroughMiddleware(req.params.id, undefined, this.token, `${host.MSG.port}/msg/${req.params.id}`, undefined, "DELETE");
             if (group.token) {
                 const result = await this.db_manager.delete(req.params.id);
                 queue.push({
@@ -161,7 +162,7 @@ export class GroupController extends CommonController<GroupManager> {
                     extra: "deleteGroup"
                 });
 
-                logInfo("Delete group", req.params.id, true);
+                logInfo("Delete group", req.params.id);
                 return res
                     .status(200)
                     .send(result);
