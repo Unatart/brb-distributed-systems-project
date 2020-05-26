@@ -30,7 +30,7 @@ function logQueue(msg:string) {
 class Queue {
     constructor() {
         logQueue("Create queue...");
-        this.rsmq = new RedisSMQ({host: "127.0.0.1", port: 6385, ns: "rsmq", realtime: true});
+        this.rsmq = new RedisSMQ({host: "127.0.0.1", port: 6379, ns: "rsmq", realtime: true});
         this.rsmq.createQueue({ qname: this.name }, (error, resp) => {
             if (error) {
                 if (error.name !== "queueExists") {

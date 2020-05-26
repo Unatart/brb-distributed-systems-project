@@ -52,7 +52,7 @@ export class UserManager extends CommonDbManager<User> {
     public async update(id:string, body:any) {
         const user = await this.repository.findOne({ where: { user_id: id } });
         if (user) {
-            if (user.name !== body.name) {
+            if (body.name && user.name !== body.name) {
                 const is_user_name_exist = await this.repository.findOne({ where: { name: body.name } });
                 if (is_user_name_exist) {
                     throw Error(ErrorCodes.USER_NAME_ENGAGED);

@@ -22,7 +22,15 @@ export class StatManager extends CommonDbManager<Stat> {
     }
 
     public async set(msg:IStat) {
-        const stat = await this.repository.create(msg);
+        const record = JSON.parse(""+msg);
+        const stat = await this.repository.create({
+            user_id: record.user_id,
+            time: record.time,
+            service_name: record.service_name,
+            method: record.method,
+            body: record.body,
+            extra: record.extra
+        });
         return await this.repository.save(stat);
     }
 }

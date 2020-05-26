@@ -19,7 +19,6 @@ export class User {
     admin?:boolean;
 
     @BeforeInsert()
-    @BeforeUpdate()
     hashPassword() {
         if (this.password) {
             this.password = createHmac('sha256', this.password).digest('hex');

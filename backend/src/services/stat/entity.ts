@@ -15,22 +15,18 @@ export class Stat implements IStat {
     @PrimaryGeneratedColumn("uuid")
     id:string;
 
-    // какой пользователь
-    @Column("uuid" )
+    @Column({ type: "uuid" })
     user_id:string;
 
-    // когда
     @Column()
     time:string;
 
     @Column()
     service_name:string;
 
-    // метод
     @Column()
     method:string;
 
-    // тело запроса
     @Column()
     body:string;
 
