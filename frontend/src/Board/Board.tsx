@@ -1,8 +1,9 @@
 import * as React from "react";
 import "./Board.css";
-import {BoardRequester} from "./requests/BoardRequester";
+import {Requester} from "../requests/Requester";
 import {Chat} from "../Chat/Chat";
 import {Link} from "react-router-dom";
+import {MembersMenu, User} from "../UiComponents/Members/Members";
 
 export interface Group {
     id:string,
@@ -18,13 +19,14 @@ interface IBoardState {
 
     groups?:Group[];
     current_group?:Group;
+    group_members?:User[];
 }
 
 // TODO: Добавить обработку ошибок
 export class Board extends React.Component<{}, IBoardState> {
     public state:IBoardState = {}
     public componentDidMount() {
-        this.requester.getInfo().then((data) => this.setState({ name: data.name, email: data.email }))
+        this.requester.getUserInfo().then((data) => this.setState({ name: data.name, email: data.email }))
         this.requester.getUserParticipantGroup().then((data) => {
             const groups = data.map((record:any) => {
                 return {
@@ -35,6 +37,8 @@ export class Board extends React.Component<{}, IBoardState> {
 
             this.setState({ groups: groups });
         });
+
+        // TODO: Вывод участников группы
     }
 
     public render() {
@@ -84,7 +88,12 @@ export class Board extends React.Component<{}, IBoardState> {
                         <div className="item-b">
                             <div className="text macro"> Group list: </div>
                             {this.state.groups && this.state.groups.map((group, key) =>
-                                <div className="text contact" key={key} onClick={() => this.setGroup(group)}>{group.name}</div>
+                                <div className="contact-block">
+                                    <div className="text contact" key={key} onClick={() => this.setGroup(group)}>
+                                        {group.name}
+                                    </div>
+                                    <div className="cross" onClick={() => this.deleteGroup(group)}>☓</div>
+                                </div>
                             )}
                         </div>
                         <div className="item-d">
@@ -95,6 +104,7 @@ export class Board extends React.Component<{}, IBoardState> {
                                 onChange={this.handleChange}
                                 onKeyUp={this.updateGroupName}
                             />
+                            {this.state.group_members && <MembersMenu users={this.state.group_members}/>}
                         </div>
                         <div className="item-c">
                             {this.state.current_group && this.state.name &&
@@ -183,7 +193,20 @@ export class Board extends React.Component<{}, IBoardState> {
 
     private setGroup = (group:Group) => {
         this.setState({ current_group: group });
+        this.requester.getGroupMembersNamesAndIds(group.id).then((data) => {
+            console.log(data);
+            this.setState({ group_members: data as User[] });
+        });
     }
 
-    private requester = new BoardRequester();
+    private deleteGroup = (group:Group) => {
+        if (this.state.groups) {
+            const index = this.state.groups.findIndex((one_group) => group.id === one_group.id);
+            const groups = this.state.groups;
+            this.setState({ groups: groups?.splice(index - 1, 1) });
+            this.requester.deleteGroup(group.id);
+        }
+    }
+
+    private requester = new Requester();
 }

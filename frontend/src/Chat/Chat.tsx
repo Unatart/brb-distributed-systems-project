@@ -4,7 +4,7 @@ import {Group} from "../Board/Board";
 import io from "socket.io-client";
 import {CookieWorker} from "../helpers";
 import {IMsgProps, Msg} from "../UiComponents/Msg/Msg";
-import {BoardRequester} from "../Board/requests/BoardRequester";
+import {Requester} from "../requests/Requester";
 
 
 interface IChatProps {
@@ -107,6 +107,7 @@ export class Chat extends React.Component<IChatProps, IChatState> {
                         onChange={this.handleChange}
                         onKeyUp={this.sendMsg}
                     />
+                    <div className="send" onClick={this.sendMsgByButton}>➢</div>
                 </div>
             </div>
         );
@@ -119,6 +120,11 @@ export class Chat extends React.Component<IChatProps, IChatState> {
             this.scroll = true;
         }
     };
+
+    private sendMsgByButton = () => {
+        this.socket.emit('new message', this.state.text);
+        this.scroll = true;
+    }
 
     private handleChange = (event:any) => {
         event.preventDefault();
@@ -179,5 +185,5 @@ export class Chat extends React.Component<IChatProps, IChatState> {
     private messagesEndRef:any = React.createRef();
     private cookie_worker:CookieWorker;
     private socket:SocketIOClient.Socket;
-    private requester:BoardRequester = new BoardRequester();
+    private requester:Requester = new Requester();
 }

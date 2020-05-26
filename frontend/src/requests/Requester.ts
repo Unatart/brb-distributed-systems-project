@@ -1,7 +1,7 @@
-import {CookieWorker} from "../../helpers";
+import {CookieWorker} from "../helpers";
 
-export class BoardRequester {
-    public getInfo():Promise<any> {
+export class Requester {
+    public getUserInfo():Promise<any> {
         return fetch(`http://localhost:3001/users/${this.uid}/?user_id=${this.uid}`,
             {
                 method: 'GET',
@@ -116,6 +116,61 @@ export class BoardRequester {
                 }
                 return res.json();
             })
+    }
+
+    public getGroupMembersNamesAndIds(group_id:string) {
+        return fetch(`http://localhost:3003/groups/members/${group_id}/?user_id=${this.uid}`,
+        {
+                method: "GET",
+                    mode: 'cors',
+                credentials: "include",
+                headers: {
+                "Access-Control-Allow-Credentials": "true",
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer <" + this.token + ">"
+            }
+        }).then((res) => {
+            if (res.status === 401) {
+                this.cookie_worker.deleteAllCookies();
+            }
+            return res.json();
+        }).then((ids) => {
+            const promises = ids.map((id:string) => {
+                return fetch(`http://localhost:3001/users/${id}/?user_id=${this.uid}`,
+                    {
+                        method: 'GET',
+                        mode: 'cors',
+                        credentials: "include",
+                        headers: {
+                            "Access-Control-Allow-Credentials": "true",
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer <" + this.token + ">"
+                        }
+                    }
+                ).then((res) => res.json());
+            });
+
+            return Promise.all(promises);
+        })
+    }
+
+    public deleteGroup(group_id:string) {
+        return fetch(`http://localhost:3003/groups/${group_id}/?user_id=${this.uid}`,
+            {
+                method: "DELETE",
+                mode: 'cors',
+                credentials: "include",
+                headers: {
+                    "Access-Control-Allow-Credentials": "true",
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer <" + this.token + ">"
+                }
+            }).then((res) => {
+                if (res.status === 401) {
+                    this.cookie_worker.deleteAllCookies();
+                }
+                return res.json();
+        });
     }
 
     private cookie_worker = new CookieWorker();

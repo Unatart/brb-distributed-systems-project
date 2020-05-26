@@ -32,19 +32,17 @@ export class Auth extends React.Component<IAuthFullProps, IAuthState> {
 
     public render() {
         return (
-            <>
-                <div className="main">
-                    <Navbar auth={true}/>
-                    <div className="hover-main">
-                        <form className="auth-form">
-                            <input name="username" type="text" placeholder='Username' required={true} onChange={this.handleChange}/>
-                            <input name='password' type='password' placeholder='Password' required={true} onChange={this.handleChange}/>
-                            <input className='submit-btn' type='submit' value={this.props.sign_in ? "Sign in" : "Sign up"} onClick={this.handleSubmit}/>
-                            <Link className="link" to={this.props.sign_in ? "/sign_up" : "/sign_in"}>{this.props.sign_in ? "Sign up" : "Sign in"}</Link>
-                        </form>
-                    </div>
+            <div className="main">
+                <Navbar auth={true}/>
+                <div className="hover-main">
+                    <form className="auth-form">
+                        <input name="username" type="text" placeholder='Username' required={true} onChange={this.handleChange}/>
+                        <input name='password' type='password' placeholder='Password' required={true} onChange={this.handleChange}/>
+                        <input className='submit-btn' type='submit' value={this.props.sign_in ? "Sign in" : "Sign up"} onClick={this.handleSubmit}/>
+                        <Link className="link" to={this.props.sign_in ? "/sign_up" : "/sign_in"}>{this.props.sign_in ? "Sign up" : "Sign in"}</Link>
+                    </form>
                 </div>
-            </>
+            </div>
         );
     }
 

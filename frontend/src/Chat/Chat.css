@@ -35,3 +35,19 @@
     width: 20%;
     margin-left: 40%;
 }
+
+.send {
+    display: block;
+    position: relative;
+    float: right;
+    font-size: 44px;
+    color: rgba(163,117,133,1);
+    background-color: transparent;
+    border: 1px solid transparent;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.send:focus {
+    border:1px solid transparent;
+}

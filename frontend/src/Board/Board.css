@@ -1,3 +1,8 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
 .container {
     height: 100vh;
     width: 100vw;
@@ -66,7 +71,7 @@
     font-size: 22px;
     width: 20%;
     height: 50%;
-    margin-left: 40%;
+    margin-left: 35%;
     text-align: center;
     vertical-align: middle;
 }
@@ -82,9 +87,14 @@
     padding: 1% 1% 1% 1%;
 }
 
-.contact {
+.contact-block {
+    margin-top: 2%;
+    display: block;
     background-color: rgba(163,117,133,1);
-    border-radius: 25px;
+}
+
+.contact {
+    display: inline;
     width: 50%;
     padding-left: 5%;
     padding-top: 2%;
@@ -92,8 +102,8 @@
     text-align: left;
 }
 
-.contact:hover {
-    padding: 3% 5% 2% 1%;
+.contact-block:hover {
+    padding: 1% 1% 1% 1%;
     font-size: 22px;
 }
 
@@ -151,5 +161,12 @@ textarea:hover {
     background-color: rgb(207, 150, 169);
     border:1px solid transparent;
     border-radius: 25px;
+}
+
+.cross {
+    display: inline;
+    float: right;
+    padding-right: 5%;
+    color: white;
 }
 
