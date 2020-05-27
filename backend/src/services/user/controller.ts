@@ -144,7 +144,7 @@ export class UserController extends CommonController<UserManager> {
             }
 
             const result = await this.db_manager.get(id);
-            if (result && result.user_id) {
+            if (result) {
                 logInfo("Check user", { exist: true });
                 return res
                     .status(200)
@@ -175,12 +175,12 @@ export class UserController extends CommonController<UserManager> {
                     .send(result);
             }
 
-            logInfo("Check user", { exist: false }, true);
+            logInfo("Check users", { exist: false }, true);
             return res
                 .status(404)
                 .send({ exist: false });
         } catch (error) {
-            logInfo("Check user failed", error.message, true);
+            logInfo("Check users failed", error.message, true);
             return res
                 .status(400)
                 .send(error.message);

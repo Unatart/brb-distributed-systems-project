@@ -102,42 +102,34 @@ export class MsgController extends CommonController<MsgManager> {
     public update = async (req:Request, res:Response) => {
         try {
             const body = req.body;
-            const user = await getThroughMiddleware(body.user_id, `${host.USER.port}/users`, this.token);
-            this.token = user.token;
-            if (user.exist === true) {
-                const group = await getThroughMiddleware(body.group_id, `${host.GROUP.port}/groups`, this.token);
-                if (group.exist === true) {
-                    if (!this.uuid_regex.test(body.user_id) || !this.uuid_regex.test(body.group_id)) {
-                        return res
-                            .status(400)
-                            .send(ErrorCodes.UID_REGEX_MATCH);
-                    }
-
-                    const result = await this.db_manager.update(req.params.id, body);
-
-                    QueuesConfig.stat.push({
-                        user_id: req.query.user_id as string,
-                        service_name: host.MSG.name,
-                        method: "PATCH",
-                        time: createDate(),
-                        body: req.body,
-                        extra: "updateMsg"
-                    });
-
-                    logInfo("Update msg", result);
+            const group = await getThroughMiddleware(body.group_id, `${host.GROUP.port}/groups`, this.token);
+            if (group.exist === true) {
+                if (!this.uuid_regex.test(body.user_id) || !this.uuid_regex.test(body.group_id)) {
                     return res
-                        .status(200)
-                        .send(result);
+                        .status(400)
+                        .send(ErrorCodes.UID_REGEX_MATCH);
                 }
-                logInfo("Update msg failed", "Group didn't exist", true);
+
+                const result = await this.db_manager.update(req.params.id, body);
+
+                QueuesConfig.stat.push({
+                    user_id: req.query.user_id as string,
+                    service_name: host.MSG.name,
+                    method: "PATCH",
+                    time: createDate(),
+                    body: req.body,
+                    extra: "updateMsg"
+                });
+
+                logInfo("Update msg", result);
                 return res
-                    .status(404)
-                    .send(group)
+                    .status(200)
+                    .send(result);
             }
             logInfo("Update msg failed", "Group didn't exist", true);
             return res
                 .status(404)
-                .send(user)
+                .send("Group didn't exist")
         } catch (error) {
             logInfo("Update msg failed", error.message, true);
             return res

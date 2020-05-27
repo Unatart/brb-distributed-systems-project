@@ -24,7 +24,5 @@ export class StatController extends CommonController<StatManager> {
         }
     };
 
-    public set = async (msg:IStat) => {
-        await this.db_manager.set(msg);
-    }
+    public set = async (msg:IStat) => await this.db_manager.set(msg);
 }

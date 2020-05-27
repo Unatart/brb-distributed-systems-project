@@ -10,7 +10,7 @@ import {statRoutes} from "./routes";
 import {logInfo} from "../../common/logger";
 import {QueuesConfig} from "../../common/queue";
 
-const app = express();
+export const app = express();
 app.use(bodyParser.json());
 
 const user_database = {...database, schema:"stat", entities: [Stat]};
