@@ -9,6 +9,7 @@ import {MsgController} from "./controller";
 import {msgRoutes} from "./routes";
 import {logInfo} from "../../common/logger";
 import cors = require('cors');
+import {QueuesConfig} from "../../common/queue";
 
 const app = express();
 app.use(bodyParser.json());
@@ -27,5 +28,6 @@ createConnection(user_database).then(() => {
 
     app.listen(host.MSG.port, () => {
         logInfo(`API ${host.MSG.name} running in http://localhost:${host.MSG.port}`);
+        setInterval(() => QueuesConfig.msg.pop(db_manager.delete), 60000);
     });
 });

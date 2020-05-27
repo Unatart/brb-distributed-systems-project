@@ -16,5 +16,7 @@ export const enum ErrorCodes {
     THIRD_PARTY_NOT_ALLOWED = "3rd party app not allowed",
     INCORRECT_AUTHORIZATION = "incorrect oauth authorization",
     GROUP_NAME_EXISTS = "group with such name already exists",
-    ERROR_403 = "authentication error"
+    ERROR_403 = "authentication error",
+    SERVICE_UNAVAILABLE = "service reject with 503 status",
+    SERVICE_BLOCKED = "service blocked"
 }

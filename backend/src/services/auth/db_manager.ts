@@ -153,7 +153,6 @@ export class AuthManager extends CommonDbManager<Auth> {
     private checkTime(expires:string) {
         const curr_d = new Date(createDate());
         const d = new Date(expires);
-        console.log(curr_d, d);
         return curr_d.getTime() < d.getTime();
     }
 

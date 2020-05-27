@@ -17,6 +17,23 @@ const logger = createLogger({
     ]
 });
 
+const queue_logger = createLogger({
+    format: combine(
+        timestamp(),
+        prettyPrint()
+    ),
+    transports: [
+        new transports.Console(),
+        new transports.File({
+            filename: "queue.log",
+            level: "info",
+            options: {
+                flags: "a+"
+            }
+        })
+    ]
+});
+
 export function logInfo(msg:string, response?:any, error?:boolean) {
     let message = `${msg}.`;
     if (response) {
@@ -25,5 +42,12 @@ export function logInfo(msg:string, response?:any, error?:boolean) {
     logger.log({
         level: error ? "error" : "info",
         message: message
+    });
+}
+
+export function logQueue(msg:string) {
+    queue_logger.log({
+        level: "info",
+        message: msg
     });
 }

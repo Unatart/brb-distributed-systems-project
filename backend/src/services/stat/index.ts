@@ -7,8 +7,8 @@ import {StatManager} from "./db_manager";
 import {Stat} from "./entity";
 import {StatController} from "./controller";
 import {statRoutes} from "./routes";
-import {queue} from "../../common/queue";
 import {logInfo} from "../../common/logger";
+import {QueuesConfig} from "../../common/queue";
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,7 +22,7 @@ createConnection(user_database).then(() => {
     app.listen(host.STAT.port, () => {
         logInfo(`API ${host.STAT.name} running in http://localhost:${host.STAT.port}`);
         setInterval(() => {
-            queue.pop(controller.set);
+            QueuesConfig.stat.pop(controller.set);
         }, 5000);
     });
 });

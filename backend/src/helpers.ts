@@ -1,7 +1,15 @@
 import {host} from "./common/host_config";
 import * as request from "request-promise";
+import {ErrorCodes} from "./common/error_codes";
 
-export const getThroughMiddleware = async (id:string, substring:string, token:string, begin_url?:string, body?:any, method?:string) => {
+export const getThroughMiddleware = async (
+    id:string,
+    substring:string,
+    token:string,
+    begin_url?:string,
+    body?:any,
+    method?:string
+):Promise<any> => {
     const uri = begin_url ||`${substring}/check/${id}`
     const full_uri = `${uri}/?token=${token}&key=${process.env.KEY}&secret=${process.env.SECRET}`;
 
@@ -15,6 +23,9 @@ export const getThroughMiddleware = async (id:string, substring:string, token:st
         .then((response) => ({ ...response, token: token }))
         .catch((error) => {
             const status = error.message.slice(0, 3);
+            if (status === "Err") {
+                throw Error(ErrorCodes.SERVICE_UNAVAILABLE);
+            }
             const res_body = error.message.slice(6);
             const token = JSON.parse(res_body).token;
             switch (status) {
@@ -43,8 +54,8 @@ export const getThroughMiddleware = async (id:string, substring:string, token:st
                             uri: `http://localhost:${uri}/?token=${response.token}&key=${process.env.KEY}&secret=${process.env.SECRET}`,
                             json: true,
                             body: body
-                        }).then((retry_response) => ({...retry_response, token: response.token}));
-                    });
+                        }).then((retry_response) => ({ ...retry_response, token: response.token }))
+                    })
             }
     });
 };

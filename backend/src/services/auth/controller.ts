@@ -4,9 +4,9 @@ import {Request, Response} from "express";
 import {host} from "../../common/host_config";
 import {ErrorCodes} from "../../common/error_codes";
 import * as request from "request-promise";
-import {queue} from "../../common/queue";
 import {createDate} from "../../helpers";
 import {logInfo} from "../../common/logger";
+import {QueuesConfig} from "../../common/queue";
 
 export class AuthController extends CommonController<AuthManager> {
     // USER
@@ -25,7 +25,7 @@ export class AuthController extends CommonController<AuthManager> {
             });
 
             const result = await this.db_manager.create(user_res);
-            queue.push({
+            QueuesConfig.stat.push({
                 user_id: result.user_id,
                 service_name: host.AUTH.name,
                 method: "POST",
@@ -62,7 +62,7 @@ export class AuthController extends CommonController<AuthManager> {
 
             const result = await this.db_manager.update(user_res.user_id);
 
-            queue.push({
+            QueuesConfig.stat.push({
                 user_id: result.user_id,
                 service_name: host.AUTH.name,
                 method: "POST",
@@ -95,7 +95,7 @@ export class AuthController extends CommonController<AuthManager> {
 
             const result = await this.db_manager.checkAndUpdate(id, token);
 
-            queue.push({
+            QueuesConfig.stat.push({
                 user_id: id,
                 service_name: host.AUTH.name,
                 method: "GET",

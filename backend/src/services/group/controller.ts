@@ -4,10 +4,11 @@ import {ErrorCodes} from "../../common/error_codes";
 import {GroupManager} from "./db_manager";
 import {host} from "../../common/host_config";
 import {createDate, getThroughMiddleware} from "../../helpers";
-import {queue} from "../../common/queue";
 import {logInfo} from "../../common/logger";
 import * as _ from "underscore";
 import {User} from "../user/entity";
+import {QueuesConfig} from "../../common/queue";
+import {messageCircuitBreaker} from "./routes";
 
 export class GroupController extends CommonController<GroupManager> {
     public get = async (req:Request, res:Response) => {
@@ -15,7 +16,7 @@ export class GroupController extends CommonController<GroupManager> {
             const id = req.params.id;
             if (this.uuid_regex.test(id)) {
                 const result = await this.db_manager.getByUserId(id);
-                queue.push({
+                QueuesConfig.stat.push({
                     user_id: req.query.user_id as string,
                     service_name: host.GROUP.name,
                     method: "GET",
@@ -46,7 +47,7 @@ export class GroupController extends CommonController<GroupManager> {
             const id = req.params.id;
             if (this.uuid_regex.test(id)) {
                 const result = await this.db_manager.getMembers(id);
-                queue.push({
+                QueuesConfig.stat.push({
                     user_id: req.query.user_id as string,
                     service_name: host.GROUP.name,
                     method: "GET",
@@ -81,7 +82,7 @@ export class GroupController extends CommonController<GroupManager> {
 
                 const result = await this.db_manager.set(req.body.name, ids);
 
-                queue.push({
+                QueuesConfig.stat.push({
                     user_id: req.query.user_id as string,
                     service_name: host.GROUP.name,
                     method: "POST",
@@ -119,7 +120,7 @@ export class GroupController extends CommonController<GroupManager> {
 
             const result = await this.db_manager.update(req.params.id, req.body);
 
-            queue.push({
+            QueuesConfig.stat.push({
                 user_id: req.query.user_id as string,
                 service_name: host.GROUP.name,
                 method: "PATCH",
@@ -142,7 +143,6 @@ export class GroupController extends CommonController<GroupManager> {
 
     public delete = async (req:Request, res:Response) => {
         try {
-            console.log(req.params.id);
             if (!this.uuid_regex.test(req.params.id)) {
                 logInfo("Delete group failed", ErrorCodes.UID_REGEX_MATCH, true);
                 return res
@@ -150,10 +150,36 @@ export class GroupController extends CommonController<GroupManager> {
                     .send(ErrorCodes.UID_REGEX_MATCH);
             }
 
-            const group = await getThroughMiddleware(req.params.id, undefined, this.token, `${host.MSG.port}/msg/${req.params.id}`, undefined, "DELETE");
+            const group = await Promise.resolve(messageCircuitBreaker.middleware())
+                .then(() => getThroughMiddleware(
+                        undefined,
+                        undefined,
+                        this.token,
+                        `${host.MSG.port}/msg/${req.params.id}`,
+                        undefined,
+                        "DELETE"))
+                .catch(async (error) => {
+                    QueuesConfig.msg.push(req.params.id);
+                    messageCircuitBreaker.upTry();
+                    const result = await this.db_manager.delete(req.params.id);
+                    QueuesConfig.stat.push({
+                        user_id: req.query.user_id as string,
+                        service_name: host.GROUP.name,
+                        method: "DELETE",
+                        time: createDate(),
+                        body: req.body,
+                        extra: "deleteGroup without messages"
+                    });
+
+                    logInfo("Delete group without messages", result);
+                    return res
+                        .status(200)
+                        .send(result);
+                });
+
             if (group.token) {
                 const result = await this.db_manager.delete(req.params.id);
-                queue.push({
+                QueuesConfig.stat.push({
                     user_id: req.query.user_id as string,
                     service_name: host.GROUP.name,
                     method: "DELETE",

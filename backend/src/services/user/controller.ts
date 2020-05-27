@@ -2,19 +2,18 @@ import {Request, Response} from "express";
 import {UserManager} from "./db_manager";
 import {CommonController} from "../../common/common_controller";
 import {ErrorCodes} from "../../common/error_codes";
-import {queue} from "../../common/queue";
 import {host} from "../../common/host_config";
 import {createDate} from "../../helpers";
 import {logInfo} from "../../common/logger";
+import {QueuesConfig} from "../../common/queue";
 
 
 export class UserController extends CommonController<UserManager> {
     public get = async (req:Request, res:Response) => {
         try {
-            console.log("get", req.params.id);
             const id = req.params.id;
 
-            queue.push({
+            QueuesConfig.stat.push({
                 user_id: req.query.user_id as string,
                 service_name: host.USER.name,
                 method: "GET",
@@ -113,7 +112,7 @@ export class UserController extends CommonController<UserManager> {
 
             const result = await this.db_manager.update(req.params.id, req.body);
 
-            queue.push({
+            QueuesConfig.stat.push({
                 user_id: req.query.user_id as string,
                 service_name: host.USER.name,
                 method: "PATCH",

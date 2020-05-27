@@ -1,36 +1,16 @@
 import * as RedisSMQ from "rsmq";
 import {IStat} from "../services/stat/entity";
-import { createLogger, format, transports } from "winston";
-const { combine, timestamp, prettyPrint } = format;
+import {logQueue} from "./logger";
 
-const queue_logger = createLogger({
-    format: combine(
-        timestamp(),
-        prettyPrint()
-    ),
-    transports: [
-        new transports.Console(),
-        new transports.File({
-            filename: "queue.log",
-            level: "info",
-            options: {
-                flags: "a+"
-            }
-        })
-    ]
-});
-
-function logQueue(msg:string) {
-    queue_logger.log({
-        level: "info",
-        message: msg
-    });
+export interface IQueue {
+    push(data:IStat):void;
+    pop(callback:(message:IStat) => Promise<void>):void;
 }
 
-class Queue {
-    constructor() {
+class Queue implements IQueue {
+    constructor(private port?:number, private name?:string) {
         logQueue("Create queue...");
-        this.rsmq = new RedisSMQ({host: "127.0.0.1", port: 6379, ns: "rsmq", realtime: true});
+        this.rsmq = new RedisSMQ({host: "127.0.0.1", port: this.port, ns: "rsmq", realtime: true});
         this.rsmq.createQueue({ qname: this.name }, (error, resp) => {
             if (error) {
                 if (error.name !== "queueExists") {
@@ -46,7 +26,7 @@ class Queue {
         });
     }
 
-    public push(data:IStat) {
+    public push(data:any) {
         this.rsmq.sendMessage({qname: this.name, message: JSON.stringify(data)}, (error, res) => {
             if (error) {
                 logQueue(error);
@@ -57,7 +37,7 @@ class Queue {
         });
     }
 
-    public pop(callback) {
+    public pop(callback:(message:any) => Promise<any>) {
         this.rsmq.popMessage({qname: this.name}, function (error, res) {
             if (error) {
                 logQueue(error);
@@ -75,7 +55,9 @@ class Queue {
     }
 
     private rsmq:RedisSMQ;
-    private name:string = "statistic_queue";
 }
 
-export const queue = new Queue();
+export const QueuesConfig = {
+    stat: new Queue(6379, "statistic_queue"),
+    msg: new Queue(6380, "msg")
+};

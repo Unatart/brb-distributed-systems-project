@@ -4,7 +4,6 @@ import * as request from "request-promise";
 import {host, isAllowed} from "../common/host_config";
 
 export const outerMiddleware = async (req:Request, res:Response, next:NextFunction) => {
-    console.log(req.header('authorization'));
     const token = /<(.*?)>/.exec(req.header('authorization'))[1];
     const user_id = req.query.user_id;
     const app_id = req.query.app_id;

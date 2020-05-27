@@ -32,12 +32,12 @@ export class MsgManager extends CommonDbManager<Msg> {
         }
     };
 
-    public async delete(group_id:string) {
+    public delete = async (group_id:string) => {
         return await this.repository
             .createQueryBuilder()
             .delete()
             .from(Msg)
-            .where({ group_id: group_id })
+            .where({ group_id: group_id.replace(/['"]+/g, '') })
             .execute();
     }
 

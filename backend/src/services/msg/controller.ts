@@ -4,9 +4,10 @@ import {ErrorCodes} from "../../common/error_codes";
 import {MsgManager} from "./db_manager";
 import {host} from "../../common/host_config";
 import {createDate, getThroughMiddleware} from "../../helpers";
-import {queue} from "../../common/queue";
 import {logInfo} from "../../common/logger";
 import {Msg} from "./entity";
+import {QueuesConfig} from "../../common/queue";
+
 
 export class MsgController extends CommonController<MsgManager> {
     public get = async (req:Request, res:Response) => {
@@ -26,7 +27,7 @@ export class MsgController extends CommonController<MsgManager> {
                         });
                     }
 
-                    queue.push({
+                    QueuesConfig.stat.push({
                         user_id: req.query.user_id as string,
                         service_name: host.MSG.name,
                         method: "GET",
@@ -71,7 +72,7 @@ export class MsgController extends CommonController<MsgManager> {
             if (group.exist === true) {
                 const result = await this.db_manager.set(body);
 
-                queue.push({
+                QueuesConfig.stat.push({
                     user_id: req.query.user_id as string,
                     service_name: host.MSG.name,
                     method: "POST",
@@ -114,7 +115,7 @@ export class MsgController extends CommonController<MsgManager> {
 
                     const result = await this.db_manager.update(req.params.id, body);
 
-                    queue.push({
+                    QueuesConfig.stat.push({
                         user_id: req.query.user_id as string,
                         service_name: host.MSG.name,
                         method: "PATCH",
@@ -149,11 +150,22 @@ export class MsgController extends CommonController<MsgManager> {
         try {
             const result = await this.db_manager.delete(req.params.group_id);
 
+            QueuesConfig.stat.push({
+                user_id: req.query.user_id as string,
+                service_name: host.MSG.name,
+                method: "DELETE",
+                time: createDate(),
+                body: { group_id: req.params.group_id },
+                extra: "deleteMsg"
+            });
+
+            logInfo(`Delete msgs by group id: ${req.params.group_id}`, result);
+
             return res
                 .status(200)
                 .send(result);
         } catch (error) {
-            logInfo("Delete msg failed", error.message, true);
+            logInfo("Delete msgs failed", error.message, true);
             return res
                 .status(400)
                 .send(error.message);
