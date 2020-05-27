@@ -202,10 +202,8 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
 
     private setGroup = (group:Group) => {
         this.setState({ current_group: group });
-        this.requester.getGroupMembersNamesAndIds(group.id).then((data) => {
-            console.log(data);
-            this.setState({ group_members: data as User[] });
-        });
+        this.requester.getGroupMembersNamesAndIds(group.id).then((data) =>
+            this.setState({ group_members: data as User[] }));
     }
 
     private deleteGroup = (group:Group) => {
