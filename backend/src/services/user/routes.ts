@@ -34,7 +34,7 @@ const oauthOuterMiddleware = async (req:Request, res:Response, next:NextFunction
             method: "GET",
             headers: { 'Content-Type': 'application/json' },
             body: {
-                user_id: req.params.user_id,
+                user_id: req.params.id,
                 app_id: req.query.app_id,
                 token: token
             },

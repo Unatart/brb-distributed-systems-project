@@ -172,9 +172,9 @@ export class AuthController extends CommonController<AuthManager> {
     // 3RD PARTY APP
     public createCode = async (req:Request, res: Response) => {
         try  {
-            const client_id = req.query.client_id as string;
-            const client_secret = req.query.client_secret as string;
-            const user_id = req.query.user_id as string;
+            const client_id = req.body.client_id;
+            const client_secret = req.body.client_secret;
+            const user_id = req.body.user_id;
             const token = /<(.*?)>/.exec(req.header('authorization'))[1];
 
             const result = await this.db_manager.createCode(user_id, client_id, client_secret, token);
@@ -240,6 +240,7 @@ export class AuthController extends CommonController<AuthManager> {
             const user_id = req.body.user_id;
             const token = req.body.token;
             const app_id = req.body.app_id;
+            console.log(app_id, token, user_id);
 
             const result = await this.db_manager.checkForOauth(user_id, app_id, token);
 
