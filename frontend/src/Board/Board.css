@@ -11,7 +11,7 @@ body {
 
     display: grid;
     grid-template-columns: 2fr 5fr;
-    grid-template-rows: 1fr 1fr 2fr 2fr 1fr 8fr;
+    grid-template-rows: 1fr 1fr 2.4fr 1.5fr 1fr 8fr;
     grid-template-areas:
             "NavBar NavBar"
             "user chat_name"
@@ -27,7 +27,7 @@ body {
 
 .item-extra a {
     display: block;
-    color: rgba(163,117,133,1);
+    color: #FF5722;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -35,14 +35,23 @@ body {
 }
 
 .item-extra a:hover {
-    color: #ffffff;
+    color: #BDC3C7;
     font-size: 26px;
 }
 
 .item-a {
     grid-area: user;
-    margin:5px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid #BDC3C7;
+    font-size: 30px;
+    background-image: url("../img/doggo.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+
+.item-a .add-group-error {
+    font-size: 20px;
+    width: 60%;
 }
 
 .item-b {
@@ -52,19 +61,18 @@ body {
 
 .item-c {
     grid-area: chat;
-    background-color: white;
-    color: rgba(163,117,133,1);
+    background: #BDC3C7;
+    color: #FF5722;
 }
 
 .item-f {
     grid-area: find;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid #BDC3C7;
 }
 
 .item-d {
     grid-area: chat_name;
-    background-color: white;
-    border-bottom: 3px solid rgba(163, 117, 133, 0.4);
+    background: linear-gradient(to bottom, #2A2C2B, #374140);
 }
 
 .item-d input {
@@ -77,20 +85,23 @@ body {
 }
 
 .text {
-    color: #FDFFFC;
+    color: #BDC3C7;
     margin-top: 2%;
     margin-bottom: 2%;
 }
 
 .add-group {
-    border: 1px solid rgba(163,117,133,1);
+    border-bottom: 1px solid rgba(189, 195, 199, 0.6);
     padding: 1% 1% 1% 1%;
+}
+
+.add-group-error {
+    color: #ef4141;
 }
 
 .contact-block {
     margin-top: 2%;
     display: block;
-    background-color: rgba(163,117,133,1);
 }
 
 .contact {
@@ -108,18 +119,21 @@ body {
 }
 
 .macro {
-    color: rgb(207, 150, 169);
+    color: #BDC3C7;
     font-size: 30px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.item-a input {
+    width: 50%;
 }
 
 input {
     background:transparent;
     border:1px solid transparent;
-    width: 70%;
+    width: 95%;
     margin:5px;
-    color: #ffffff;
-    font-size:15px;
+    color: #BDC3C7;
+    font-size: 20px;
     font-family: 'Montserrat Alternates', sans-serif;
 }
 
@@ -132,7 +146,7 @@ textarea {
     border:1px solid transparent;
     margin:5px;
     width: 90%;
-    color:#FDFFFC;
+    color: #BDC3C7;
     font-size:15px;
     font-family: 'Montserrat Alternates', sans-serif;
     resize: none;
@@ -147,7 +161,7 @@ textarea:hover {
     border:1px solid transparent;
     margin:5px;
     width: 95%;
-    color:#FDFFFC;
+    color: #BDC3C7;
     font-size:15px;
     font-family: 'Montserrat Alternates', sans-serif;
     resize: none;
@@ -158,7 +172,7 @@ textarea:hover {
 }
 
 .ready_msg {
-    background-color: rgb(207, 150, 169);
+    background-color: #BDC3C7;
     border:1px solid transparent;
     border-radius: 25px;
 }
@@ -167,6 +181,6 @@ textarea:hover {
     display: inline;
     float: right;
     padding-right: 5%;
-    color: white;
+    color: #BDC3C7;
 }
 

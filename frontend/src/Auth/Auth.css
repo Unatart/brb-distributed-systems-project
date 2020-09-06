@@ -3,22 +3,34 @@
     flex-direction:column;
     justify-content:space-between;
     align-items:center;
-    margin-top: 20%;
+    margin-top: 12%;
 }
 
 .auth-form input {
     background:transparent;
-    border:1px solid #FDFFFC;
+    border:1px solid #BDC3C7;
     padding: 20px 120px 25px 10px;
     margin:5px;
-    color: rgb(255, 222, 234);
-    font-size:15px;
-    width: 200px;
+    color: #FF5722;
+    font-size: 20px;
+    width: 290px;
     font-family: 'Montserrat Alternates', sans-serif;
 }
 
+.error {
+    color: #ef4141;
+    font-size: 24px;
+}
+
+.notice {
+    width: 25%;
+    color: #BDC3C7;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
 ::placeholder {
-    color: rgba(163,117,133,1);
+    color: #FF5722;
 }
 
 .auth-form input:focus {
@@ -26,16 +38,16 @@
 }
 
 .auth-form input::placeholder {
-    color:#FDFFFC;
+    color: #BDC3C7;
 }
 
 .submit-btn:hover {
-    background: rgba(163,117,133,1);
-    color: white;
+    background: #374140;
+    color: #BDC3C7;
 }
 
 .link {
     font-family: 'Montserrat Alternates', sans-serif;
-    color: white;
-    font-size: 12px;
+    color: #BDC3C7;
+    font-size: 18px;
 }

@@ -12,16 +12,16 @@
 
 .name {
     grid-area: user_name;
-    font-size: 14px;
+    font-size: 18px;
 }
 
 .msg {
     grid-area: msg;
-    font-size: 16px;
-    color: dimgray;
+    font-size: 26px;
+    color: #2A2C2B;
 }
 
 .time {
     grid-area: time;
-    font-size: 12px;
+    font-size: 18px;
 }

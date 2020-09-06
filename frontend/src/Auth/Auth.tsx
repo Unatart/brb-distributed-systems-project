@@ -22,7 +22,6 @@ interface IAuthState {
 }
 
 
-// TODO: Добавить обработку ошибок
 export class Auth extends React.Component<IAuthFullProps, IAuthState> {
     public state:IAuthState = {
         username: "",
@@ -36,6 +35,9 @@ export class Auth extends React.Component<IAuthFullProps, IAuthState> {
                 <Navbar auth={true}/>
                 <div className="hover-main">
                     <form className="auth-form">
+                        <div className="notice">{this.notice_string_password}</div>
+                        <div className="notice">{this.notice_string_username}</div>
+                        <div className="error">{this.state.error ? `Attention: ${this.state.error}` : undefined}</div>
                         <input name="username" type="text" placeholder='Username' required={true} onChange={this.handleChange}/>
                         <input name='password' type='password' placeholder='Password' required={true} onChange={this.handleChange}/>
                         <input className='submit-btn' type='submit' value={this.props.sign_in ? "Sign in" : "Sign up"} onClick={this.handleSubmit}/>
@@ -72,8 +74,13 @@ export class Auth extends React.Component<IAuthFullProps, IAuthState> {
                     },
                     body: JSON.stringify({name: this.state.username, password: this.state.password})
                 })
-                    .then((response) => response.json())
-                    .then((data) => this.setData(data));
+                    .then((response) => {
+                        if ([200, 201].indexOf(response.status) === -1) {
+                            response.text().then((err) => this.setState({ error: err.slice(7, -1) }));
+                        } else {
+                            response.json().then((data) => this.setData(data));
+                        }
+                    })
             }
 
             return fetch("http://localhost:3000/auth/user/", {
@@ -86,8 +93,13 @@ export class Auth extends React.Component<IAuthFullProps, IAuthState> {
                 },
                 body: JSON.stringify({name: this.state.username, password: this.state.password})
             })
-                .then((response) => response.json())
-                .then((data) => this.setData(data));
+                .then((response) => {
+                    if ([200, 201].indexOf(response.status) === -1) {
+                        response.text().then((err) => this.setState({ error: err.slice(7, -1) }));
+                    } else {
+                        response.json().then((data) => this.setData(data));
+                    }
+                })
         }
 
         this.setState({error: "You must fill in the fields above."});
@@ -103,6 +115,8 @@ export class Auth extends React.Component<IAuthFullProps, IAuthState> {
 
     private cookie_worker = new CookieWorker();
 
+    private notice_string_username = "Username must include lowercase\n and uppercase lat. letters, numbers, symbols - and _,\n and be from 6 to 32 characters long";
+    private notice_string_password = "Password must contain at least one digit,\n at least one lowercase lat. letter,\n at least one uppercase lat. letter\n and be at least 8 characters long";
 }
 
 export function AuthWithHistory(props:IAuthProps) {

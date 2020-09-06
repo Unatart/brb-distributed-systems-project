@@ -53,7 +53,7 @@ export class Requester {
                 if (res.status === 401) {
                     this.cookie_worker.deleteAllCookies();
                 }
-                return res.json();
+                return res;
             });
     }
 

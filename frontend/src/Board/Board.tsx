@@ -21,6 +21,9 @@ interface IBoardState {
     groups?:Group[];
     current_group?:Group;
     group_members?:User[];
+
+    error_find?:string;
+    error_change_name?:string;
 }
 
 interface IBoardProps {
@@ -31,7 +34,7 @@ interface IBoardFullProps extends IBoardProps {
     history:any;
 }
 
-// TODO: Добавить обработку ошибок
+// TODO: Добавить обработку ошибок, удаление юзера из группы - low priority
 export class Board extends React.Component<IBoardFullProps, IBoardState> {
     public state:IBoardState = {}
     public componentDidMount() {
@@ -46,8 +49,6 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
 
             this.setState({ groups: groups });
         });
-
-        // TODO: Вывод участников группы
     }
 
     public render() {
@@ -75,6 +76,7 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
                                 onKeyUp={this.updateInfo}
                                 onChange={this.handleChange}
                             />
+                            <div className="add-group-error">{this.state.error_change_name}</div>
                         </div>
                         <div className="item-f">
                             <div className="text macro"> Add new group: </div>
@@ -83,7 +85,6 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
                                 type="text"
                                 name="find"
                                 placeholder={this.state.find || "try to find contact by name or email"}
-                                onKeyUp={this.findContacts}
                                 onChange={this.handleChange}
                             />
                             <input
@@ -92,7 +93,9 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
                                 name="group_name"
                                 placeholder={this.state.group_name || "enter group name"}
                                 onChange={this.handleChange}
+                                onKeyUp={this.findContacts}
                             />
+                            <div className="add-group-error">{this.state.error_find}</div>
                         </div>
                         <div className="item-b">
                             <div className="text macro"> Group list: </div>
@@ -144,7 +147,15 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
     private updateInfo = (event:any) => {
         event.preventDefault();
         if (event.keyCode === 13) {
-            this.requester.updateInfo(JSON.stringify({ name: this.state.name, email: this.state.email }));
+            this.requester.updateInfo(JSON.stringify({ name: this.state.name, email: this.state.email }))
+                .then((response) => {
+                    if ([200, 201].indexOf(response.status) === -1) {
+                        response.text().then((err) =>
+                            this.setState({ error_change_name: err }));
+                    } else {
+                        this.setState({ error_change_name: undefined });
+                    }
+                });
         }
     }
 
@@ -155,22 +166,29 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
 
             this.requester.findContact(JSON.stringify({
                 user_names: [this.state.name, ...users],
-                name: this.state.group_name
+                name: this.state.group_name || [this.state.name, ...users].join("")
             }))
-                .then((data) => {
-                    const groups:Group[] | undefined = this.state.groups;
-                    if (!groups) {
-                        this.setState({ groups: [{
-                                id: data[0].group_id,
-                                name: data[0].name
-                            }]});
+                .then((response) => {
+                    if ([200, 201].indexOf(response.status) === -1) {
+                        response.text().then((err) =>
+                            this.setState({ error_find: "Can't find user(s) with such username(s)" }));
+                    } else {
+                        response.json().then((data) => {
+                            const groups:Group[] | undefined = this.state.groups;
+                            if (!groups) {
+                                this.setState({ groups: [{
+                                        id: data[0].group_id,
+                                        name: data[0].name
+                                    }]});
 
-                        return;
+                                return;
+                            }
+
+                            groups.push({ id: data[0].group_id, name: data[0].name });
+                            this.setState({ groups: groups, error_find: undefined });
+                        });
                     }
-
-                    groups.push({ id: data[0].group_id, name: data[0].name });
-                    this.setState({ groups: groups });
-                });
+                })
         }
     }
 
@@ -206,12 +224,11 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
             this.setState({ group_members: data as User[] }));
     }
 
-    private deleteGroup = (group:Group) => {
+    private deleteGroup = (deleting_group:Group) => {
         if (this.state.groups) {
-            const index = this.state.groups.findIndex((one_group) => group.id === one_group.id);
-            const groups = this.state.groups;
-            this.setState({ groups: groups?.splice(index - 1, 1) });
-            this.requester.deleteGroup(group.id);
+            const new_groups = this.state.groups?.filter((group) => group.id !== deleting_group.id);
+            this.setState({ groups: new_groups });
+            this.requester.deleteGroup(deleting_group.id);
         }
     }
 

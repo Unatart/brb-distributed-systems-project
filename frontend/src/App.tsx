@@ -21,9 +21,10 @@ export class App extends React.Component<{}, IAppState> {
         return (
             <HashRouter>
                 <Switch>
-                    <Route exact path="/">
-                        {this.state.is_auth ? <BoardWithHistory update_handler={this.checkCookie}/> : <Home/>}
-                    </Route>
+                    <Route exact path="/">{this.state.is_auth
+                        ? <BoardWithHistory update_handler={this.checkCookie}/>
+                        : <Home/>
+                    }</Route>
                     <Route path="/sign_in"><AuthWithHistory sign_in={true} update_handler={this.checkCookie}/></Route>
                     <Route path="/sign_up"><AuthWithHistory sign_in={false} update_handler={this.checkCookie}/></Route>
                     <Route path="/oauth"><OAuth2Page/></Route>

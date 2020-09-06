@@ -1,9 +1,10 @@
 .dropbtn {
-    color: rgba(163,117,133,1);
+    color: #FF5722;
     padding: 16px;
-    font-size: 16px;
+    font-size: 32px;
     border: none;
     cursor: pointer;
+    background-color: transparent;
 }
 
 .dropdown {
@@ -15,18 +16,17 @@
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
+    background-color: #fbfbfb;
     min-width: 100px;
-    box-shadow: 0px 5px 10px 0px rgba(163,117,133,1);
     z-index: 1;
 }
 
 .dropdown-content div {
-    color: rgba(163,117,133,1);
+    color: #FF5722;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-    font-size: 14px;
+    font-size: 20px;
 }
 
 .dropdown-content div:hover {background-color: #f1f1f1}

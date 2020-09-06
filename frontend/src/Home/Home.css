@@ -4,10 +4,8 @@
 }
 
 .main {
-    background: rgb(42,34,34);
-    background: linear-gradient(180deg, rgba(42,34,34,1) 0%, rgba(112,36,74,1) 35%, rgba(163,117,133,1) 100%);
+    background-color: #2A2C2B;
     background-size: cover;
-    background-repeat: no-repeat;
     width: 100vw;
     height: 100vh;
 }
@@ -28,35 +26,34 @@
 
 .app_name {
     font-family: 'Montserrat Alternates', sans-serif;
-    font-size: 36px;
-    margin-bottom: 20%;
+    font-size: 44px;
+    margin-bottom: 25%;
     margin-left: 20%;
-    border-bottom: 2px dotted rgba(163,117,133,1);
-    width: 22%;
+    border-bottom: 2px dotted #FF5722;
+    width: 26%;
     text-align: center;
-    color: rgba(163,117,133,1);
+    color: #FF5722;
 }
 
 .left {
     font-family: 'Montserrat Alternates', sans-serif;
-    color: rgba(163,117,133,1);
+    color: #BDC3C7;
     font-size: 24px;
-    background-color: rgba(255, 255, 255, 0.75);
     padding: 5px;
     margin-left: 50%;
     margin-bottom: 5%;
     width: 50%;
     border-radius: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(189, 195, 199, 0.7);
 }
 
 .left:hover {
-    font-size: 26px;
+    font-size: 30px;
 }
 
 .left-writing {
     font-family: 'Montserrat Alternates', sans-serif;
-    color: rgba(163,117,133,1);
+    color: #BDC3C7;
     font-size: 20px;
     padding: 5px;
     margin-left: 50%;
@@ -65,16 +62,15 @@
 
 .right {
     font-family: 'Montserrat Alternates', sans-serif;
-    color: rgba(163,117,133,1);
+    color: #BDC3C7;
     font-size: 24px;
-    background-color: rgba(255, 255, 255, 0.75);
     padding: 5px;
     margin-left: -40%;
     width: 50%;
     border-radius: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(189, 195, 199, 0.7);
 }
 
 .right:hover {
-    font-size: 26px;
+    font-size: 30px;
 }

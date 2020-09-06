@@ -15,13 +15,13 @@ li {
 
 li a {
     display: block;
-    color: rgba(163,117,133,1);
+    color: #FF5722;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
 }
 
 li a:hover {
-    color: #ffffff;
+    color: #BDC3C7;
     font-size: 26px;
 }
