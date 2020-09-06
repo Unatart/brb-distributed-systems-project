@@ -54,7 +54,7 @@ io
 
         socket.on('close', () => {
             logInfo(`${user_name} has disconnected.`);
-            socket.close();
+            // socket.connection.close
         });
 });
 

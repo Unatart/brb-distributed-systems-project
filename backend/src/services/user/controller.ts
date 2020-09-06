@@ -62,7 +62,7 @@ export class UserController extends CommonController<UserManager> {
             logInfo("Get by name and password failed", ErrorCodes.NO_SUCH_USER, true);
             return res
                 .status(404)
-                .send(Error(ErrorCodes.NO_SUCH_USER));
+                .send(ErrorCodes.NO_SUCH_USER);
 
         } catch (error) {
             return res
@@ -110,21 +110,30 @@ export class UserController extends CommonController<UserManager> {
                     .send(ErrorCodes.UID_REGEX_MATCH);
             }
 
-            const result = await this.db_manager.update(req.params.id, req.body);
+            if (
+                this.username_regex.test(req.body.name) && (
+                this.email_regex.test(req.body.email) || !req.body.email)
+            ) {
+                const result = await this.db_manager.update(req.params.id, req.body);
 
-            QueuesConfig.stat.push({
-                user_id: req.query.user_id as string,
-                service_name: host.USER.name,
-                method: "PATCH",
-                time: createDate(),
-                body: req.body,
-                extra: "updateUser"
-            });
+                QueuesConfig.stat.push({
+                    user_id: req.query.user_id as string,
+                    service_name: host.USER.name,
+                    method: "PATCH",
+                    time: createDate(),
+                    body: req.body,
+                    extra: "updateUser"
+                });
 
-            logInfo("Update user", result);
-            return res
-                .status(200)
-                .send(result);
+                logInfo("Update user", result);
+                return res
+                    .status(200)
+                    .send(result);
+            } else {
+                return res
+                    .status(404)
+                    .send(ErrorCodes.UPDATE_USER_WARNING);
+            }
         } catch (error) {
             logInfo("Update user failed", error.message, true);
             return res
@@ -168,7 +177,7 @@ export class UserController extends CommonController<UserManager> {
             const names:string[] = req.body.user_names;
 
             const result = await this.db_manager.getMany(names);
-            if (result) {
+            if (result.length === names.length) {
                 logInfo("Check users", { exist: true });
                 return res
                     .status(200)
@@ -223,4 +232,5 @@ export class UserController extends CommonController<UserManager> {
      * и быть длинной от 6 до 32 символов
      */
     private username_regex = /^[a-zA-Z0-9_-]{6,32}$/;
+    private email_regex = /\S+@\S+\.\S+/;
 }

@@ -54,7 +54,9 @@ export class AuthController extends CommonController<AuthManager> {
                 body: req.body,
                 uri: `http://localhost:${host.USER.port}/users/`,
                 json: true
-            }).catch((error) => {
+            })
+            .catch((error) => {
+                console.log("catch error", error.message);
                 return res
                     .status(404)
                     .send(error.message);

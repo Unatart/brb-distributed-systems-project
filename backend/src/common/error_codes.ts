@@ -18,5 +18,6 @@ export const enum ErrorCodes {
     GROUP_NAME_EXISTS = "group with such name already exists",
     ERROR_403 = "authentication error",
     SERVICE_UNAVAILABLE = "service reject with 503 status",
-    SERVICE_BLOCKED = "service blocked"
+    SERVICE_BLOCKED = "service blocked",
+    UPDATE_USER_WARNING = "Username or email are incorrect, please recheck data"
 }
