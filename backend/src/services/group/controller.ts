@@ -3,7 +3,7 @@ import {Request, Response} from "express";
 import {ErrorCodes} from "../../common/error_codes";
 import {GroupManager} from "./db_manager";
 import {host} from "../../common/host_config";
-import {createDate, getThroughMiddleware} from "../../helpers";
+import {checkForErrors, createDate, getThroughMiddleware} from "../../helpers";
 import {logInfo} from "../../common/logger";
 import * as _ from "underscore";
 import {User} from "../user/entity";
@@ -99,12 +99,12 @@ export class GroupController extends CommonController<GroupManager> {
 
             logInfo("Set group failed", users, true);
             return res
-                .status(404)
+                .status(400)
                 .send(users)
         } catch (error) {
             logInfo("Set group failed", error.message, true);
             return res
-                .status(404)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -136,7 +136,7 @@ export class GroupController extends CommonController<GroupManager> {
         } catch (error) {
             logInfo("Update group failed", error.message, true);
             return res
-                .status(400)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -158,7 +158,7 @@ export class GroupController extends CommonController<GroupManager> {
                         `${host.MSG.port}/msg/${req.params.id}`,
                         undefined,
                         "DELETE"))
-                .catch(async (error) => {
+                .catch(async () => {
                     QueuesConfig.msg.push(req.params.id);
                     messageCircuitBreaker.upTry();
                     const result = await this.db_manager.delete(req.params.id);
@@ -196,7 +196,7 @@ export class GroupController extends CommonController<GroupManager> {
         } catch (error) {
             logInfo("Delete group failed", error.message, true);
             return res
-                .status(400)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -222,7 +222,7 @@ export class GroupController extends CommonController<GroupManager> {
                 .send(ErrorCodes.UID_REGEX_MATCH);
         } catch (error) {
             return res
-                .status(404)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };

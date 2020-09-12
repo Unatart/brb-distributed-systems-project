@@ -3,7 +3,7 @@ import {UserManager} from "./db_manager";
 import {CommonController} from "../../common/common_controller";
 import {ErrorCodes} from "../../common/error_codes";
 import {host} from "../../common/host_config";
-import {createDate} from "../../helpers";
+import {checkForErrors, createDate} from "../../helpers";
 import {logInfo} from "../../common/logger";
 import {QueuesConfig} from "../../common/queue";
 
@@ -30,7 +30,7 @@ export class UserController extends CommonController<UserManager> {
         } catch (error) {
             logInfo("Get user failed", error.message, true);
             return res
-                .status(404)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -66,7 +66,7 @@ export class UserController extends CommonController<UserManager> {
 
         } catch (error) {
             return res
-                .status(404)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     }
@@ -96,7 +96,7 @@ export class UserController extends CommonController<UserManager> {
         } catch (error) {
             logInfo("Set user failed", error.message, true);
             return res
-                .status(404)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -137,7 +137,7 @@ export class UserController extends CommonController<UserManager> {
         } catch (error) {
             logInfo("Update user failed", error.message, true);
             return res
-                .status(400)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -167,7 +167,7 @@ export class UserController extends CommonController<UserManager> {
         } catch (error) {
             logInfo("Check user failed", error.message, true);
             return res
-                .status(400)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -191,7 +191,7 @@ export class UserController extends CommonController<UserManager> {
         } catch (error) {
             logInfo("Check users failed", error.message, true);
             return res
-                .status(400)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -214,7 +214,7 @@ export class UserController extends CommonController<UserManager> {
         } catch (error) {
             logInfo("Convert user ids failed", error.message, true);
             return res
-                .status(400)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };

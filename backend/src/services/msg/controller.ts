@@ -3,7 +3,7 @@ import {Request, Response} from "express";
 import {ErrorCodes} from "../../common/error_codes";
 import {MsgManager} from "./db_manager";
 import {host} from "../../common/host_config";
-import {createDate, getThroughMiddleware} from "../../helpers";
+import {checkForErrors, createDate, getThroughMiddleware} from "../../helpers";
 import {logInfo} from "../../common/logger";
 import {Msg} from "./entity";
 import {QueuesConfig} from "../../common/queue";
@@ -53,7 +53,7 @@ export class MsgController extends CommonController<MsgManager> {
         } catch (error) {
             logInfo("Get msg failed", error.message, true);
             return res
-                .status(404)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -94,7 +94,7 @@ export class MsgController extends CommonController<MsgManager> {
         } catch (error) {
             logInfo("Set msg failed", error.message, true);
             return res
-                .status(404)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -133,7 +133,7 @@ export class MsgController extends CommonController<MsgManager> {
         } catch (error) {
             logInfo("Update msg failed", error.message, true);
             return res
-                .status(400)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -159,7 +159,7 @@ export class MsgController extends CommonController<MsgManager> {
         } catch (error) {
             logInfo("Delete msgs failed", error.message, true);
             return res
-                .status(400)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };

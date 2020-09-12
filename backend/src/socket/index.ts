@@ -9,7 +9,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
 io
-    .use(function(socket, next){
+    .use(function(socket, next) {
         if (socket.handshake.query && socket.handshake.query.token && socket.handshake.query.user_id){
             return request({
                 method: "GET",

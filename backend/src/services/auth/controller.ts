@@ -4,7 +4,7 @@ import {Request, Response} from "express";
 import {host} from "../../common/host_config";
 import {ErrorCodes} from "../../common/error_codes";
 import * as request from "request-promise";
-import {createDate} from "../../helpers";
+import {checkForErrors, createDate} from "../../helpers";
 import {logInfo} from "../../common/logger";
 import {QueuesConfig} from "../../common/queue";
 
@@ -20,7 +20,7 @@ export class AuthController extends CommonController<AuthManager> {
                 json: true
             }).catch((error) => {
                 return res
-                    .status(400)
+                    .status(checkForErrors(error))
                     .send(error.message);
             });
 
@@ -41,7 +41,7 @@ export class AuthController extends CommonController<AuthManager> {
         } catch (error) {
             logInfo("Sign out user failed", error.message, true);
             return res
-                .status(404)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -56,9 +56,8 @@ export class AuthController extends CommonController<AuthManager> {
                 json: true
             })
             .catch((error) => {
-                console.log("catch error", error.message);
                 return res
-                    .status(404)
+                    .status(checkForErrors(error))
                     .send(error.message);
             });
 
@@ -80,7 +79,7 @@ export class AuthController extends CommonController<AuthManager> {
         } catch (error) {
             logInfo("Sign in user failed", error.message, true);
             return res
-                .status(404)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     }
@@ -115,7 +114,7 @@ export class AuthController extends CommonController<AuthManager> {
         } catch (error) {
             logInfo("Check token failed", error.message, true);
             return res
-                .status(404)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -194,7 +193,7 @@ export class AuthController extends CommonController<AuthManager> {
                 .send(result);
         } catch (error) {
             return res
-                .status(400)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -234,7 +233,7 @@ export class AuthController extends CommonController<AuthManager> {
             }
         } catch (error) {
             return res
-                .status(400)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };
@@ -258,7 +257,7 @@ export class AuthController extends CommonController<AuthManager> {
                 .send(result);
         } catch (error) {
             return res
-                .status(400)
+                .status(checkForErrors(error))
                 .send(error.message);
         }
     };

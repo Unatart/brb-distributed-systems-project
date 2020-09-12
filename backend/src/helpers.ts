@@ -68,3 +68,19 @@ export function createDate(db?:boolean):string {
     }
     return d.toISOString().split("").slice(0, 10).join("") + " " + d.toISOString().split("").slice(11, 19).join("");
 }
+
+export function checkForErrors(error:Error) {
+    switch (error.message) {
+        case ErrorCodes.THIRD_PARTY_NOT_ALLOWED:
+        case ErrorCodes.SERVICE_UNAVAILABLE:
+        case ErrorCodes.ERROR_403:
+        case ErrorCodes.ADMIN_ALLOWED:
+            return 403;
+        case ErrorCodes.INCORRECT_AUTHORIZATION:
+        case ErrorCodes.REQUIRE_TOKEN_AND_UID:
+        case ErrorCodes.TOKEN_EXPIRED:
+            return 401;
+        default:
+            return 400;
+    }
+}
