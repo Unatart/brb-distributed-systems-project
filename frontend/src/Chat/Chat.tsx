@@ -18,6 +18,8 @@ interface IChatState {
     messages:IMsgProps[];
 }
 
+const MSG_SEND_TIMEOUT_MS = 5000;
+
 export class Chat extends React.Component<IChatProps, IChatState> {
     constructor(props:IChatProps) {
         super(props);
@@ -40,6 +42,7 @@ export class Chat extends React.Component<IChatProps, IChatState> {
         this.setGroup();
 
         this.socket.on('new message', ((data:any) => {
+            this.clearTimer();
             this.setState({
                 text: '',
                 messages: [...this.state.messages, { user_name: data.user_name, text: data.message, time: data.time, id: data.id }]
@@ -60,6 +63,7 @@ export class Chat extends React.Component<IChatProps, IChatState> {
                 forceNew: true
             });
             this.socket.on('new message', ((data:any) => {
+                this.clearTimer();
                 if (this.state.messages[this.state.messages.length - 1].id !== data.id) {
                     this.setState({ text: '',
                         messages: [...this.state.messages, {
@@ -117,14 +121,23 @@ export class Chat extends React.Component<IChatProps, IChatState> {
     private sendMsg = (event:any) => {
         event.preventDefault();
         if (event.keyCode === 13) {
-            this.socket.emit('new message', this.state.text);
-            this.scroll = true;
+            this.emitMsg();
         }
     };
 
     private sendMsgByButton = () => {
+        this.emitMsg();
+    }
+
+    private emitMsg() {
         this.socket.emit('new message', this.state.text);
         this.scroll = true;
+        this.error = true;
+        this.send_msg_timer = setTimeout(() => {
+            if (this.error) {
+                alert("Some problems with msg sending...try later");
+            }
+        }, MSG_SEND_TIMEOUT_MS);
     }
 
     private handleChange = (event:any) => {
@@ -180,6 +193,14 @@ export class Chat extends React.Component<IChatProps, IChatState> {
             });
     }
 
+    private clearTimer() {
+        clearTimeout(this.send_msg_timer);
+        this.send_msg_timer = null;
+        this.error = false;
+    }
+
+    private send_msg_timer:any = null;
+    private error:boolean = false;
     private scroll:boolean = true;
     private to:number = 10;
     private from:number | undefined;

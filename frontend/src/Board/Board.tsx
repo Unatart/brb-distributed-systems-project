@@ -234,7 +234,7 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
     private deleteGroup = (deleting_group:Group) => {
         if (this.state.groups) {
             const new_groups = this.state.groups?.filter((group) => group.id !== deleting_group.id);
-            this.setState({ groups: new_groups });
+            this.setState({ groups: new_groups, current_group: undefined, group_name: undefined, group_members: undefined });
             this.requester.deleteGroup(deleting_group.id);
         }
     }
