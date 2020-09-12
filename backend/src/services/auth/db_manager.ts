@@ -29,12 +29,18 @@ export class AuthManager extends CommonDbManager<Auth> {
         throw Error(ErrorCodes.NO_SUCH_USER);
     }
 
-    public async checkAndUpdate(id:string, token:string) {
+    public async checkAndUpdate(id:string, token:string, admin:boolean) {
         const session = await this.repository.findOne({ where: { user_id: id, token: token }});
 
         if (session) {
             if (session.app_id) {
                 throw Error(ErrorCodes.THIRD_PARTY_NOT_ALLOWED);
+            }
+
+            if (admin) {
+                if (!session.is_admin) {
+                    throw Error(ErrorCodes.ADMIN_ALLOWED);
+                }
             }
 
             if (this.checkTime(session.expires)) {

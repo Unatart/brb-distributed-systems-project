@@ -12,7 +12,10 @@ export class StatController extends CommonController<StatManager> {
             const service_name = req.query.service_name as string !== "undefined"
                 ? req.query.service_name as string
                 : undefined;
-            const result = await this.db_manager.get(count, service_name);
+            const method = req.query.method as string !== "undefined"
+                ? req.query.method as string
+                : undefined;
+            const result = await this.db_manager.get(count, service_name, method);
 
             return res
                 .status(200)

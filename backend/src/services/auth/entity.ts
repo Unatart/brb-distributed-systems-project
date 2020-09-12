@@ -15,6 +15,9 @@ export class Auth {
     @Column({ nullable:true })
     user_id:string;
 
+    @Column({ nullable:true })
+    is_admin:boolean;
+
     // SERVICES
     @Column({ nullable:true })
     service_key:string;

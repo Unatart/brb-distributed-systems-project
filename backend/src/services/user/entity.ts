@@ -15,9 +15,6 @@ export class User {
     @Column({ nullable: true })
     email:string;
 
-    @Column({ nullable: true })
-    admin?:boolean;
-
     @BeforeInsert()
     hashPassword() {
         if (this.password) {

@@ -11,7 +11,6 @@ export const user:User = {
     password: "pass",
     name: "UserName",
     email:" user@outlook.com",
-    admin: false,
     hashPassword: jest.fn()
 };
 

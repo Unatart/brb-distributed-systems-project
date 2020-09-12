@@ -89,13 +89,15 @@ export class AuthController extends CommonController<AuthManager> {
         try {
             const id = req.params.id;
             const token = req.query.token as string;
+            const admin = req.query.admin === "true";
+
             if (!this.uuid_regex.test(id)) {
                 return res
                     .status(400)
                     .send(ErrorCodes.UID_REGEX_MATCH);
             }
 
-            const result = await this.db_manager.checkAndUpdate(id, token);
+            const result = await this.db_manager.checkAndUpdate(id, token, admin);
 
             QueuesConfig.stat.push({
                 user_id: id,
@@ -149,7 +151,7 @@ export class AuthController extends CommonController<AuthManager> {
                 .send(result);
         } catch (error) {
             return res
-                .status(404)
+                .status(403)
                 .send(error.message);
         }
     };
@@ -166,7 +168,7 @@ export class AuthController extends CommonController<AuthManager> {
                 .send(result);
         } catch (error) {
             return res
-                .status(404)
+                .status(403)
                 .send(error.message);
         }
     };

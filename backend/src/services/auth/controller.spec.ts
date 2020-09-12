@@ -15,7 +15,8 @@ const auth:Auth = {
     app_id: "4",
     app_secret: "secret4",
     code: "code",
-    refresh_token: "refresh"
+    refresh_token: "refresh",
+    is_admin: false
 }
 
 const good_request:req = {

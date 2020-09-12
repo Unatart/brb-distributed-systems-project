@@ -17,7 +17,7 @@ io
                 uri: `http://localhost:${host.AUTH.port}/auth/user/${socket.handshake.query.user_id}/?token=${socket.handshake.query.token}`
             })
                 .then(() => {
-                    logInfo('authentication passed')
+                    logInfo('authentication passed');
                     return next();
                 })
                 .catch(() => next(new Error(ErrorCodes.ERROR_403)));

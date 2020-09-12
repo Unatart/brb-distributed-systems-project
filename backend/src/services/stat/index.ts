@@ -9,9 +9,16 @@ import {StatController} from "./controller";
 import {statRoutes} from "./routes";
 import {logInfo} from "../../common/logger";
 import {QueuesConfig} from "../../common/queue";
+import cors = require('cors');
 
 export const app = express();
 app.use(bodyParser.json());
+
+app.use(cors({
+    exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar', "Access-Control-Allow-Credentials", "Content-Type"],
+    credentials: true,
+    origin: true
+}));
 
 const user_database = {...database, schema:"stat", entities: [Stat]};
 createConnection(user_database).then(() => {
