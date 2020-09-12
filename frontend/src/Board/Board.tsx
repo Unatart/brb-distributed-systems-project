@@ -121,6 +121,7 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
                         <div className="item-c">
                             {this.state.current_group && this.state.name &&
                             <Chat
+                                update_handler={this.logout}
                                 current_group={this.state.current_group}
                                 user_name={this.state.name}
                             />}
@@ -150,6 +151,9 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
             this.requester.updateInfo(JSON.stringify({ name: this.state.name, email: this.state.email }))
                 .then((response) => {
                     if ([200, 201].indexOf(response.status) === -1) {
+                        if (response.status === 401) {
+                            return this.logout();
+                        }
                         response.text().then((err) =>
                             this.setState({ error_change_name: err }));
                     } else {
@@ -170,7 +174,10 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
             }))
                 .then((response) => {
                     if ([200, 201].indexOf(response.status) === -1) {
-                        response.text().then((err) =>
+                        if (response.status === 401) {
+                            return this.logout();
+                        }
+                        response.text().then(() =>
                             this.setState({ error_find: "Can't find user(s) with such username(s)" }));
                     } else {
                         response.json().then((data) => {
@@ -238,7 +245,7 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
         this.props.update_handler();
     }
 
-    private requester = new Requester();
+    private requester = new Requester(this.logout);
     private cookie_worker = new CookieWorker();
 }
 

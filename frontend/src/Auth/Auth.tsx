@@ -109,6 +109,7 @@ export class Auth extends React.Component<IAuthFullProps, IAuthState> {
         this.cookie_worker.set("uid", data.user_id);
         this.cookie_worker.set("token", data.token);
         this.cookie_worker.set("expires", data.expires);
+        this.cookie_worker.set("is_admin", data.is_admin);
         this.props.history.push("/");
         this.props.update_handler();
     }

@@ -1,6 +1,10 @@
 import {CookieWorker} from "../helpers";
 
 export class Requester {
+    constructor(private logout:() => void) {
+        //
+    }
+
     public getUserInfo():Promise<any> {
         return fetch(`http://localhost:3001/users/${this.uid}/?user_id=${this.uid}`,
             {
@@ -13,12 +17,8 @@ export class Requester {
                     "Authorization": "Bearer <" + this.token + ">"
                 }
             }
-        ).then((res) => {
-            if (res.status === 401) {
-                this.cookie_worker.deleteAllCookies();
-            }
-            return res.json();
-        })
+        )
+            .then(this.check);
     }
 
     public updateInfo(body:any) {
@@ -52,6 +52,7 @@ export class Requester {
             .then((res) => {
                 if (res.status === 401) {
                     this.cookie_worker.deleteAllCookies();
+                    this.logout();
                 }
                 return res;
             });
@@ -69,12 +70,7 @@ export class Requester {
                     "Authorization": "Bearer <" + this.token + ">"
                 }
             })
-            .then((res) => {
-                if (res.status === 401) {
-                    this.cookie_worker.deleteAllCookies();
-                }
-                return res.json();
-            });
+            .then(this.check);
     }
 
     public getMessagesForGroup(group_id:string, to:number, from?:number) {
@@ -89,12 +85,7 @@ export class Requester {
                     "Authorization": "Bearer <" + this.token + ">"
                 }
             })
-            .then((res) => {
-                if (res.status === 401) {
-                    this.cookie_worker.deleteAllCookies();
-                }
-                return res.json();
-            })
+            .then(this.check);
     }
 
     public updateGroupName(group_id:string, new_name:string) {
@@ -110,12 +101,22 @@ export class Requester {
                 },
                 body: JSON.stringify({ name: new_name })
             })
-            .then((res) => {
-                if (res.status === 401) {
-                    this.cookie_worker.deleteAllCookies();
+            .then(this.check);
+    }
+
+    public getStat(service_name?:string, method?:string, count?:number) {
+        return fetch(`http://localhost:3004/stat/?user_id=${this.uid}&service_name=${service_name}&method=${method}&count=${count}&admin=true`,
+            {
+                method: "GET",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                    "Access-Control-Allow-Credentials": "true",
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer <" + this.token + ">"
                 }
-                return res.json();
             })
+            .then(this.check);
     }
 
     public getGroupMembersNamesAndIds(group_id:string) {
@@ -129,12 +130,9 @@ export class Requester {
                     "Content-Type": "application/json",
                     "Authorization": "Bearer <" + this.token + ">"
             }
-        }).then((res) => {
-            if (res.status === 401) {
-                this.cookie_worker.deleteAllCookies();
-            }
-            return res.json();
-        }).then((ids) => {
+        })
+            .then(this.check)
+            .then((ids) => {
             const promises = ids.map((id:string) => {
                 return fetch(`http://localhost:3001/users/${id}/?user_id=${this.uid}`,
                     {
@@ -165,12 +163,16 @@ export class Requester {
                     "Content-Type": "application/json",
                     "Authorization": "Bearer <" + this.token + ">"
                 }
-            }).then((res) => {
-                if (res.status === 401) {
-                    this.cookie_worker.deleteAllCookies();
-                }
-                return res.json();
-        });
+            }).then(this.check);
+    }
+
+    private check = (res:Response) => {
+        console.log(res);
+        if (res.status === 401) {
+            this.cookie_worker.deleteAllCookies();
+            this.logout();
+        }
+        return res.json();
     }
 
     private cookie_worker = new CookieWorker();

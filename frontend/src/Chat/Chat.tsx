@@ -10,6 +10,7 @@ import {Requester} from "../requests/Requester";
 interface IChatProps {
     current_group:Group;
     user_name:string;
+    update_handler:() => void;
 }
 
 interface IChatState {
@@ -185,5 +186,5 @@ export class Chat extends React.Component<IChatProps, IChatState> {
     private messagesEndRef:any = React.createRef();
     private cookie_worker:CookieWorker;
     private socket:SocketIOClient.Socket;
-    private requester:Requester = new Requester();
+    private requester:Requester = new Requester(this.props.update_handler);
 }
