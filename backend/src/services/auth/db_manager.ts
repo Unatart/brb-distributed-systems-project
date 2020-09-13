@@ -33,10 +33,6 @@ export class AuthManager extends CommonDbManager<Auth> {
         const session = await this.repository.findOne({ where: { user_id: id, token: token }});
 
         if (session) {
-            if (session.app_id) {
-                throw Error(ErrorCodes.THIRD_PARTY_NOT_ALLOWED);
-            }
-
             if (admin) {
                 if (!session.is_admin) {
                     throw Error(ErrorCodes.ADMIN_ALLOWED);
@@ -106,54 +102,6 @@ export class AuthManager extends CommonDbManager<Auth> {
         }
 
         throw Error(ErrorCodes.NO_SUCH_SERVICE);
-    }
-
-    public async createCode(user_id:string, app_id:string, app_secret:string, token:string) {
-        const find_one =  await this.repository.findOne({where: {user_id: user_id, token:token, code: null}});
-        if (find_one) {
-            const session = {
-                user_id: user_id,
-                app_id: app_id,
-                app_secret: app_secret,
-                code: this.token_gen.generate()
-            };
-
-            const session_res = await this.repository.create(session);
-            return await this.repository.save(session_res);
-        }
-    }
-
-    public async createTokenForCode(code:string, app_id:string, app_secret:string) {
-        const find_same = await this.repository.findOne({where: {code: code, app_id: app_id, app_secret: app_secret}});
-        if (find_same) {
-            await this.repository.merge(find_same, {
-                token: this.token_gen.generate(),
-                refresh_token: this.token_gen.generate(),
-                expires: createDate(true),
-            });
-            return await this.repository.save(find_same);
-        }
-    }
-
-    public async refreshTokenForCode(app_id:string, app_secret:string, refresh_token:string) {
-        const find_same = await this.repository.findOne({where: {refresh_token: refresh_token, app_id: app_id, app_secret: app_secret}});
-        if (find_same) {
-            await this.repository.merge(find_same, {
-                token: this.token_gen.generate(),
-                refresh_token: this.token_gen.generate(),
-                expires: createDate(true),
-            });
-            return await this.repository.save(find_same);
-        }
-    }
-
-    public async checkForOauth(user_id:string, app_id:string, token:string) {
-        const find_same = await this.repository.findOne({where: {user_id: user_id, app_id: app_id, token: token}});
-        if (find_same) {
-            return find_same;
-        }
-
-        throw Error(ErrorCodes.INCORRECT_AUTHORIZATION);
     }
 
     private checkTime(expires:string) {

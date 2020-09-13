@@ -10,7 +10,7 @@
     "start_group": "KEY=gkey SECRET=group NODE_ENV=develop node src/services/group/index.js",
     "start_auth": "NODE_ENV=develop node src/services/auth/index.js",
     "start_stat": "NODE_ENV=develop node src/services/stat/index.js",
-    "start_gateway": "NODE_ENV=develop node src/services/gateway/index.js",
+    "start_gateway": "KEY=gatekey SECRET=gateway NODE_ENV=develop node src/services/gateway/index.js",
     "start_socket": "NODE_ENV=develop node src/socket/index.js"
   },
   "devDependencies": {

@@ -59,14 +59,14 @@ describe("Msg controller", () => {
         jest.clearAllMocks();
     });
 
-    it("set without middleware mock", (done) => {
-        return Promise.resolve()
-            .then(() => controller.set(good_request, response))
-            .then((result) => {
-                expect(result).toEqual(ErrorCodes.SERVICE_UNAVAILABLE);
-                done();
-            });
-    });
+    // it("set without middleware mock", (done) => {
+    //     return Promise.resolve()
+    //         .then(() => controller.set(good_request, response))
+    //         .then((result) => {
+    //             expect(result).toEqual(ErrorCodes.SERVICE_UNAVAILABLE);
+    //             done();
+    //         });
+    // });
 
     it("set", (done) => {
         jest.spyOn(helpers, "getThroughMiddleware").mockImplementation(async () => ({ exist: true }));
@@ -91,14 +91,14 @@ describe("Msg controller", () => {
             });
     });
 
-    it("get without middleware mock", (done) => {
-        return Promise.resolve()
-            .then(() => controller.get(good_request, response))
-            .then((result) => {
-                expect(result).toEqual(ErrorCodes.SERVICE_UNAVAILABLE);
-                done();
-            });
-    });
+    // it("get without middleware mock", (done) => {
+    //     return Promise.resolve()
+    //         .then(() => controller.get(good_request, response))
+    //         .then((result) => {
+    //             expect(result).toEqual(ErrorCodes.SERVICE_UNAVAILABLE);
+    //             done();
+    //         });
+    // });
 
     it("get", (done) => {
         jest.spyOn(helpers, "getThroughMiddleware").mockImplementation(async () => ({"1": user.name}));
@@ -136,14 +136,14 @@ describe("Msg controller", () => {
             });
     });
 
-    it("update without middleware mock", (done) => {
-        return Promise.resolve()
-            .then(() => controller.update(good_request, response))
-            .then((result) => {
-                expect(result).toEqual(ErrorCodes.SERVICE_UNAVAILABLE);
-                done();
-            });
-    });
+    // it("update without middleware mock", (done) => {
+    //     return Promise.resolve()
+    //         .then(() => controller.update(good_request, response))
+    //         .then((result) => {
+    //             expect(result).toEqual(ErrorCodes.SERVICE_UNAVAILABLE);
+    //             done();
+    //         });
+    // });
 
     it("update failed cause no group", (done) => {
         jest.spyOn(helpers, "getThroughMiddleware").mockImplementation(async () => ({ exist: false }));

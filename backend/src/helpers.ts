@@ -3,8 +3,8 @@ import * as request from "request-promise";
 import {ErrorCodes} from "./common/error_codes";
 
 export const getThroughMiddleware = async (
-    id:string,
-    substring:string,
+    id:string | undefined,
+    substring:string | undefined,
     token:string,
     begin_url?:string,
     body?:any,

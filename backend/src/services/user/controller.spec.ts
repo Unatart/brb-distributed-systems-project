@@ -20,7 +20,8 @@ const good_request:req = {
     },
     body: {
         name: "Useeer07",
-        password: "Udsvfg136asdGT"
+        password: "Udsvfg136asdGT",
+        user_names: ["Useeer07"]
     },
     query: {}
 };

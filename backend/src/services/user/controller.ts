@@ -12,6 +12,7 @@ export class UserController extends CommonController<UserManager> {
     public get = async (req:Request, res:Response) => {
         try {
             const id = req.params.id;
+            console.log(id);
 
             QueuesConfig.stat.push({
                 user_id: req.query.user_id as string,

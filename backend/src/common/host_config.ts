@@ -30,21 +30,4 @@ export const host = {
     }
 };
 
-export const allowedForGateway = {
-    1: {
-        path: "/users",
-        method: "GET"
-    },
-}
-
-export function isAllowed(req:Request):boolean {
-    for (let key in allowedForGateway) {
-        if (allowedForGateway[key].path === req.baseUrl && allowedForGateway[key].method === req.method) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 

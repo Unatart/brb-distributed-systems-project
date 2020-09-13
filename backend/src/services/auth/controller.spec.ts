@@ -12,10 +12,6 @@ const auth:Auth = {
     user_id: "2",
     service_key: "3",
     service_secret: "secret3",
-    app_id: "4",
-    app_secret: "secret4",
-    code: "code",
-    refresh_token: "refresh",
     is_admin: false
 }
 

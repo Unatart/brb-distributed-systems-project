@@ -15,6 +15,7 @@ export const innerMiddleware = async (req:Request, res:Response, next:NextFuncti
             uri: `http://localhost:${host.AUTH.port}/auth/service`
         }).then(() => next());
     } else {
+        console.log(req.query.key, req.query.secret);
         return request({
             method: "POST",
             headers: { 'Content-Type': 'application/json' },

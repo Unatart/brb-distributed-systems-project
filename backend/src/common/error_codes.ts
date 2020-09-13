@@ -19,5 +19,6 @@ export const enum ErrorCodes {
     ERROR_403 = "authentication error",
     SERVICE_UNAVAILABLE = "service reject with 503 status",
     SERVICE_BLOCKED = "service blocked",
-    UPDATE_USER_WARNING = "Username or email are incorrect, please recheck data"
+    UPDATE_USER_WARNING = "Username or email are incorrect, please recheck data",
+    UNREGISTERED_APPLICATION = "3rd party application must register"
 }
