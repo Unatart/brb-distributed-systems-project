@@ -21,16 +21,15 @@ export class OAuth2Page extends React.Component {
                     return pair[1];
                 }
             }
-            return false;
         };
         const redirect_url = getQueryVariable("redirect_url");
-        const client_id = getQueryVariable("client_id");
-        const client_secret = getQueryVariable("client_secret");
-        if (redirect_url && client_id && client_secret) {
+        const app_id = getQueryVariable("app_id");
+        const app_secret = getQueryVariable("app_secret");
+        if (redirect_url && app_id && app_secret) {
             const user_id = this.cookie_worker.get("uid");
             const token = this.cookie_worker.get("token");
             if (user_id && token) {
-                fetch("http://localhost:3000/oauth", {
+                fetch(`http://localhost:3005/oauth/?user_id=${user_id}`, {
                     method: "post",
                     mode: 'cors',
                     credentials: "include",
@@ -40,19 +39,15 @@ export class OAuth2Page extends React.Component {
                         "Authorization": "Bearer <" + token + ">"
                     },
                     body: JSON.stringify({
-                        user_id: user_id,
-                        client_id: client_id,
-                        client_secret: client_secret
+                        app_id: app_id,
+                        app_secret: app_secret
                     })
                 }).then((response) => {
                     if (response.status === 200) {
                         return response.json();
                     }
                 })
-                    .then((body) => {
-                        console.log(body);
-                        window.location.replace(redirect_url + "/?code=" + body.code);
-                    })
+                    .then((body) => window.location.replace(redirect_url + "/?code=" + body.code))
                     .catch((error) => alert(error));
             } else {
                 alert("U must authorize firstly");

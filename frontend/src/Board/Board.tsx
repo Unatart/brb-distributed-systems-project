@@ -165,6 +165,10 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
 
     private findContacts = (event:any) => {
         event.preventDefault();
+        if (!this.state.find) {
+            this.setState({error_find: "Fill in the fields above to create a group"});
+            return;
+        }
         if (event.keyCode === 13) {
             const users:string[] = this.state.find!.split(",").map(str => str.trim());
 
