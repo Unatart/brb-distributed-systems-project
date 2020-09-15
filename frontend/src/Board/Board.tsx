@@ -49,6 +49,19 @@ export class Board extends React.Component<IBoardFullProps, IBoardState> {
 
             this.setState({ groups: groups });
         });
+
+        setInterval(() => {
+            this.requester.getUserParticipantGroup().then((data) => {
+                const groups = data.map((record:any) => {
+                    return {
+                        id: record.group_id,
+                        name: record.name
+                    }
+                });
+
+                this.setState({ groups: groups });
+            });
+        }, 60000);
     }
 
     public render() {

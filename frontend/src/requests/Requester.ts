@@ -105,7 +105,7 @@ export class Requester {
     }
 
     public getStat(service_name?:string, method?:string, count?:number) {
-        return fetch(`http://localhost:3004/stat/?user_id=${this.uid}&service_name=${service_name}&method=${method}&count=${count}&admin=true`,
+        return fetch(`http://localhost:3004/stat/?user_id=${this.uid}&service_name=${service_name}&method=${method}&count=${count}&admin=${true}`,
             {
                 method: "GET",
                 mode: "cors",
@@ -167,7 +167,6 @@ export class Requester {
     }
 
     private check = (res:Response) => {
-        console.log(res);
         if (res.status === 401) {
             this.cookie_worker.deleteAllCookies();
             this.logout();

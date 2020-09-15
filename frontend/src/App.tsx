@@ -29,7 +29,10 @@ export class App extends React.Component<{}, IAppState> {
                     <Route path="/sign_in"><AuthWithHistory sign_in={true} update_handler={this.checkCookie}/></Route>
                     <Route path="/sign_up"><AuthWithHistory sign_in={false} update_handler={this.checkCookie}/></Route>
                     <Route path="/oauth"><OAuth2Page/></Route>
-                    {this.cookie_worker.get("is_admin") && <Route path="/admin"><Admin update_handler={this.checkCookie}/></Route>}
+                    {this.cookie_worker.get("is_admin") !== "null"
+                        ? <Route path="/admin"><Admin update_handler={this.checkCookie}/></Route>
+                        : <BoardWithHistory update_handler={this.checkCookie}/>
+                    }
                 </Switch>
             </HashRouter>
         );

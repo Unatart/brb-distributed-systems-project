@@ -11,6 +11,12 @@ interface IAdminState {
 }
 
 export class Admin extends React.PureComponent<{update_handler:() => void;}, IAdminState> {
+    public state:IAdminState = {
+        service_name: undefined,
+        method: undefined,
+        count: undefined
+    };
+
     public render() {
         return (
             <div className="main">
