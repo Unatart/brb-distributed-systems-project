@@ -13,7 +13,6 @@ export class GatewayController extends CommonController<GatewayManager> {
 
             const result = await this.db_manager.checkRegistration(app_id, app_secret);
 
-            console.log(result);
             return !!result;
         } catch (error) {
             return res
@@ -117,7 +116,6 @@ export class GatewayController extends CommonController<GatewayManager> {
             const token = /<(.*?)>/.exec(req.header('authorization'))[1];
             const app_id = req.body.app_id || req.query.app_id;
 
-            console.log(user_id, token, app_id);
             const result = this.db_manager.checkForOauth(user_id, app_id, token);
 
             if (result) {
@@ -128,7 +126,10 @@ export class GatewayController extends CommonController<GatewayManager> {
 
                     return res
                         .status(200)
-                        .send(user)
+                        .send({
+                            user_name: user.name,
+                            email: user.email
+                        });
                 }
 
                 return res

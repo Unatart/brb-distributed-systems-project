@@ -33,10 +33,8 @@ export class AuthManager extends CommonDbManager<Auth> {
         const session = await this.repository.findOne({ where: { user_id: id, token: token }});
 
         if (session) {
-            if (admin) {
-                if (!session.is_admin) {
-                    throw Error(ErrorCodes.ADMIN_ALLOWED);
-                }
+            if (admin && !session.is_admin) {
+                throw Error(ErrorCodes.ADMIN_ALLOWED);
             }
 
             if (this.checkTime(session.expires)) {

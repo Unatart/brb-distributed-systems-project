@@ -88,7 +88,7 @@ export class AuthController extends CommonController<AuthManager> {
         try {
             const id = req.params.id;
             const token = req.query.token as string;
-            const admin = req.query.admin === "true";
+            const admin = req.query.admin as string === "true";
 
             if (!this.uuid_regex.test(id)) {
                 return res
